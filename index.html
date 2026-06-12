@@ -157,9 +157,31 @@
         const nakshatras = [
             { name: "Ashwini", symbol: "Horse Head", deity: "Ashwini Kumaras" },
             { name: "Bharani", symbol: "Yoni", deity: "Yama" },
+            { name: "Krittika", symbol: "Razor", deity: "Agni" },
+            { name: "Rohini", symbol: "Chariot", deity: "Brahma" },
+            { name: "Mrigashira", symbol: "Deer Head", deity: "Soma" },
+            { name: "Ardra", symbol: "Teardrop", deity: "Rudra" },
+            { name: "Punarvasu", symbol: "Bow and Quiver", deity: "Aditi" },
             { name: "Pushya", symbol: "Flower", deity: "Brihaspati" },
+            { name: "Ashlesha", symbol: "Coiled Serpent", deity: "Nagas" },
             { name: "Magha", symbol: "Throne", deity: "Pitris" },
-            { name: "Chitra", symbol: "Jewel", deity: "Vishvakarma" }
+            { name: "Purva Phalguni", symbol: "Hammock", deity: "Bhaga" },
+            { name: "Uttara Phalguni", symbol: "Bed", deity: "Aryaman" },
+            { name: "Hasta", symbol: "Hand", deity: "Savitar" },
+            { name: "Chitra", symbol: "Jewel", deity: "Vishvakarma" },
+            { name: "Swati", symbol: "Young Sprout in Wind", deity: "Vayu" },
+            { name: "Vishakha", symbol: "Triumphal Arch", deity: "Indra-Agni" },
+            { name: "Anuradha", symbol: "Lotus", deity: "Mitra" },
+            { name: "Jyeshtha", symbol: "Earring", deity: "Indra" },
+            { name: "Mula", symbol: "Bundle of Roots", deity: "Nirriti" },
+            { name: "Purva Ashadha", symbol: "Winnowing Fan", deity: "Apas" },
+            { name: "Uttara Ashadha", symbol: "Elephant Tusk", deity: "Vishvadevas" },
+            { name: "Shravana", symbol: "Three Footprints", deity: "Vishnu" },
+            { name: "Dhanishta", symbol: "Drum", deity: "Eight Vasus" },
+            { name: "Shatabhisha", symbol: "Empty Circle", deity: "Varuna" },
+            { name: "Purva Bhadrapada", symbol: "Sword", deity: "Aja Ekapada" },
+            { name: "Uttara Bhadrapada", symbol: "Twins", deity: "Ahir Budhnya" },
+            { name: "Revati", symbol: "Fish", deity: "Pushan" }
         ];
 
         // Mapping South Indian Grid Order (Start top-left-ish)
@@ -222,7 +244,13 @@
             const container = document.getElementById('optionsContainer');
             container.innerHTML = '';
 
-            nakshatras.forEach(n => {
+            // Show the correct answer plus 3 random wrong ones, shuffled
+            const wrong = nakshatras.filter(n => n.name !== quest.name)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3);
+            const options = [quest, ...wrong].sort(() => Math.random() - 0.5);
+
+            options.forEach(n => {
                 const opt = document.createElement('div');
                 opt.className = 'quiz-option';
                 opt.innerText = n.name;
