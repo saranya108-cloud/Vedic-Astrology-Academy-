@@ -10,16 +10,34 @@
             --brown: #5d4037;
             --cream: #fffaf0;
             --accent: #a52a2a;
+            --fire: #ffe3d4;
+            --fire-edge: #ff8a5c;
+            --earth: #e3f4e4;
+            --earth-edge: #6abf72;
+            --air: #ddeffd;
+            --air-edge: #5aa9e6;
+            --water: #eae3f8;
+            --water-edge: #9575cd;
         }
 
         body {
             font-family: 'Segoe UI', sans-serif;
-            background-color: #f4f1ea;
+            background: linear-gradient(160deg, #fff7e8 0%, #fcebd8 45%, #f6e0ee 100%);
+            min-height: 100vh;
+            margin: 0;
             color: var(--brown);
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
+        }
+
+        h1 {
+            background: linear-gradient(90deg, #b8860b, #e07b39, #a52a2a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
         }
 
         .dashboard {
@@ -51,14 +69,35 @@
             font-size: 11px;
             position: relative;
             cursor: pointer;
+            transition: 0.2s;
         }
 
-        .cell:hover { background-color: var(--cream); }
+        .cell:hover { filter: brightness(0.93); }
+
+        /* Element tints for the 12 signs */
+        .element-fire { background-color: var(--fire); }
+        .element-earth { background-color: var(--earth); }
+        .element-air { background-color: var(--air); }
+        .element-water { background-color: var(--water); }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            font-size: 11px;
+            margin-top: 6px;
+            flex-wrap: wrap;
+        }
+
+        .legend span {
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
 
         .empty-center {
             grid-column: 2 / 4;
             grid-row: 2 / 4;
-            background-color: var(--cream);
+            background: linear-gradient(135deg, #fffaf0, #ffe9c7);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -86,33 +125,53 @@
             width: 400px;
             background: white;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-radius: 12px;
+            box-shadow: 0 6px 14px rgba(93,64,55,0.12);
+            border-top: 5px solid var(--gold);
+        }
+
+        .panel h4 {
+            color: var(--accent);
+            border-bottom: 2px dotted var(--gold);
+            padding-bottom: 2px;
         }
 
         button {
-            background: var(--brown);
+            background: linear-gradient(135deg, #8d6e63, #5d4037);
             color: white;
             border: none;
             padding: 10px 20px;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             margin: 5px 0;
             width: 100%;
+            transition: 0.2s;
         }
 
-        button:hover { background: var(--accent); }
+        button:hover { filter: brightness(1.15); transform: translateY(-1px); }
+
+        /* Module button colors */
+        .btn-nak { background: linear-gradient(135deg, #ff9d6c, #e0633a); }
+        .btn-yoga { background: linear-gradient(135deg, #ab7fd4, #7e57c2); }
+        .btn-graha { background: linear-gradient(135deg, #4db6ac, #00897b); }
+        .btn-dasha { background: linear-gradient(135deg, #64b5f6, #1976d2); }
+        .btn-house { background: linear-gradient(135deg, #81c784, #43a047); }
+        .btn-aspect { background: linear-gradient(135deg, #f06292, #d81b60); }
 
         .quiz-option {
-            background: #eee;
-            margin: 5px 0;
+            background: linear-gradient(90deg, #fff3e0, #ffe7c2);
+            border-left: 4px solid var(--gold);
+            margin: 6px 0;
             padding: 10px;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             transition: 0.2s;
         }
 
-        .quiz-option:hover { background: var(--gold); }
+        .quiz-option:hover {
+            background: linear-gradient(90deg, #ffd54f, #ffb74d);
+            transform: translateX(4px);
+        }
 
         .hidden { display: none; }
 
@@ -123,13 +182,20 @@
         }
 
         .nak-card {
-            border: 1px solid #d2b48c;
-            border-left: 4px solid var(--gold);
-            border-radius: 4px;
+            border: 1px solid #e8d5b5;
+            border-left: 5px solid var(--gold);
+            border-radius: 8px;
             padding: 8px 10px;
             margin: 6px 0;
             font-size: 13px;
+            background: #fffdf8;
         }
+
+        /* Rotate friendly accent colors through the cards */
+        .nak-card:nth-child(4n+1) { border-left-color: var(--fire-edge); background: #fff8f4; }
+        .nak-card:nth-child(4n+2) { border-left-color: var(--earth-edge); background: #f6fbf6; }
+        .nak-card:nth-child(4n+3) { border-left-color: var(--air-edge); background: #f4f9fe; }
+        .nak-card:nth-child(4n+4) { border-left-color: var(--water-edge); background: #f9f6fd; }
 
         .nak-card h4 {
             margin: 0 0 4px;
@@ -152,6 +218,12 @@
             <div class="jyotish-grid" id="chartGrid">
                 </div>
             <p style="text-align:center"><small>South Indian Style: Fixed Signs, Clockwise Houses</small></p>
+            <div class="legend">
+                <span style="background:var(--fire)">🔥 Fire</span>
+                <span style="background:var(--earth)">🌱 Earth</span>
+                <span style="background:var(--air)">💨 Air</span>
+                <span style="background:var(--water)">💧 Water</span>
+            </div>
         </div>
 
         <div class="panel" id="uiPanel">
@@ -159,19 +231,19 @@
                 <h3>Lesson: Reading the Chart</h3>
                 <p id="lessonText">Select a box in the chart to learn about the Sign, House, and Ruler.</p>
                 <h4 style="margin-bottom:4px">Module 1: Nakshatras</h4>
-                <button onclick="showNakshatraGuide()">Explore the 27 Nakshatras</button>
-                <button onclick="startNakshatraQuiz()">Start Nakshatra Quiz</button>
+                <button class="btn-nak" onclick="showNakshatraGuide()">🌟 Explore the 27 Nakshatras</button>
+                <button class="btn-nak" onclick="startNakshatraQuiz()">🎯 Start Nakshatra Quiz</button>
                 <h4 style="margin-bottom:4px">Module 2: Planetary Yogas</h4>
-                <button onclick="showYogaModule()">Explore Planetary Yogas</button>
-                <button onclick="startYogaQuiz()">Start Yoga Quiz</button>
+                <button class="btn-yoga" onclick="showYogaModule()">🪔 Explore Planetary Yogas</button>
+                <button class="btn-yoga" onclick="startYogaQuiz()">🎯 Start Yoga Quiz</button>
                 <h4 style="margin-bottom:4px">Module 3: The 9 Grahas</h4>
-                <button onclick="showGrahaModule()">Explore the Grahas</button>
+                <button class="btn-graha" onclick="showGrahaModule()">🪐 Explore the Grahas</button>
                 <h4 style="margin-bottom:4px">Module 4: Vimshottari Dasha</h4>
-                <button onclick="showDashaModule()">Explore the Dasha System</button>
+                <button class="btn-dasha" onclick="showDashaModule()">⏳ Explore the Dasha System</button>
                 <h4 style="margin-bottom:4px">Module 5: The 12 Houses</h4>
-                <button onclick="showHouseModule()">Explore the Bhavas</button>
+                <button class="btn-house" onclick="showHouseModule()">🏛️ Explore the Bhavas</button>
                 <h4 style="margin-bottom:4px">Module 6: Planetary Aspects</h4>
-                <button onclick="showAspectModule()">Explore Drishti</button>
+                <button class="btn-aspect" onclick="showAspectModule()">👁️ Explore Drishti</button>
             </div>
 
             <div id="moduleMode" class="hidden">
@@ -351,7 +423,8 @@
 
                 const sign = signs[signIdx];
                 const cell = document.createElement('div');
-                cell.className = 'cell';
+                const elements = ['fire', 'earth', 'air', 'water'];
+                cell.className = `cell element-${elements[signIdx % 4]}`;
                 cell.innerHTML = `<span class="sign-label">${sign.sans}</span>`;
 
                 // Add an example Lagna in Taurus (Sign 1)
