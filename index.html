@@ -158,14 +158,50 @@
             <div id="studyMode">
                 <h3>Lesson: Reading the Chart</h3>
                 <p id="lessonText">Select a box in the chart to learn about the Sign, House, and Ruler.</p>
-                <button onclick="startNakshatraQuiz()">Start Nakshatra Quiz</button>
+                <h4 style="margin-bottom:4px">Module 1: Nakshatras</h4>
                 <button onclick="showNakshatraGuide()">Explore the 27 Nakshatras</button>
+                <button onclick="startNakshatraQuiz()">Start Nakshatra Quiz</button>
+                <h4 style="margin-bottom:4px">Module 2: Planetary Yogas</h4>
+                <button onclick="showYogaModule()">Explore Planetary Yogas</button>
+                <button onclick="startYogaQuiz()">Start Yoga Quiz</button>
+                <h4 style="margin-bottom:4px">Module 3: The 9 Grahas</h4>
+                <button onclick="showGrahaModule()">Explore the Grahas</button>
+                <h4 style="margin-bottom:4px">Module 4: Vimshottari Dasha</h4>
+                <button onclick="showDashaModule()">Explore the Dasha System</button>
+                <h4 style="margin-bottom:4px">Module 5: The 12 Houses</h4>
+                <button onclick="showHouseModule()">Explore the Bhavas</button>
+                <h4 style="margin-bottom:4px">Module 6: Planetary Aspects</h4>
+                <button onclick="showAspectModule()">Explore Drishti</button>
+            </div>
+
+            <div id="moduleMode" class="hidden">
+                <h3 id="moduleTitle"></h3>
+                <p id="moduleIntro" style="font-size:13px"></p>
+                <div id="moduleList" class="nak-list"></div>
+                <button onclick="exitModule()" style="background:#777">Back to Study</button>
             </div>
 
             <div id="guideMode" class="hidden">
                 <h3>The 27 Nakshatras</h3>
                 <div id="nakshatraList" class="nak-list"></div>
                 <button onclick="exitGuide()" style="background:#777">Back to Study</button>
+            </div>
+
+            <div id="yogaMode" class="hidden">
+                <h3>Planetary Yogas</h3>
+                <div style="display:flex; gap:5px;">
+                    <button onclick="renderYogaList('Major')" style="width:50%">Major Yogas</button>
+                    <button onclick="renderYogaList('Secondary')" style="width:50%">Secondary Yogas</button>
+                </div>
+                <div id="yogaList" class="nak-list"></div>
+                <button onclick="exitYogaModule()" style="background:#777">Back to Study</button>
+            </div>
+
+            <div id="yogaQuizMode" class="hidden">
+                <h3>Yoga Quiz</h3>
+                <p id="yogaQuestionText"></p>
+                <div id="yogaOptionsContainer"></div>
+                <button onclick="exitYogaQuiz()" style="background:#777">Back to Study</button>
             </div>
 
             <div id="quizMode" class="hidden">
@@ -215,6 +251,89 @@
             { name: "Purva Bhadrapada", symbol: "Sword, Front Legs of a Funeral Cot", deity: "Aja Ekapada", ruler: "Jupiter", degrees: "20°00' Aquarius – 3°20' Pisces" },
             { name: "Uttara Bhadrapada", symbol: "Twins, Back Legs of a Funeral Cot", deity: "Ahir Budhnya", ruler: "Saturn", degrees: "3°20' – 16°40' Pisces" },
             { name: "Revati", symbol: "Pair of Fish, Drum", deity: "Pushan", ruler: "Mercury", degrees: "16°40' – 30°00' Pisces" }
+        ];
+
+        const yogas = [
+            // --- Major Yogas ---
+            { name: "Gaja Kesari Yoga", rank: "Major", category: "Lunar", nature: "Auspicious",
+              formation: "Jupiter is in a kendra (1st, 4th, 7th or 10th) from the Moon",
+              effects: "Wisdom, lasting fame, respect from others and success in undertakings." },
+            { name: "Ruchaka Yoga", rank: "Major", category: "Pancha Mahapurusha", nature: "Auspicious",
+              formation: "Mars in its own sign (Aries/Scorpio) or exalted (Capricorn) in a kendra from the Lagna",
+              effects: "Courage, physical strength, leadership and a commanding personality." },
+            { name: "Bhadra Yoga", rank: "Major", category: "Pancha Mahapurusha", nature: "Auspicious",
+              formation: "Mercury in its own sign (Gemini/Virgo) or exalted (Virgo) in a kendra from the Lagna",
+              effects: "Sharp intellect, eloquent speech, business acumen and long life." },
+            { name: "Hamsa Yoga", rank: "Major", category: "Pancha Mahapurusha", nature: "Auspicious",
+              formation: "Jupiter in its own sign (Sagittarius/Pisces) or exalted (Cancer) in a kendra from the Lagna",
+              effects: "Wisdom, spirituality, pure character and the respect of learned people." },
+            { name: "Malavya Yoga", rank: "Major", category: "Pancha Mahapurusha", nature: "Auspicious",
+              formation: "Venus in its own sign (Taurus/Libra) or exalted (Pisces) in a kendra from the Lagna",
+              effects: "Beauty, artistic talent, luxuries, vehicles and marital happiness." },
+            { name: "Shasha Yoga", rank: "Major", category: "Pancha Mahapurusha", nature: "Auspicious",
+              formation: "Saturn in its own sign (Capricorn/Aquarius) or exalted (Libra) in a kendra from the Lagna",
+              effects: "Authority over others, political power, discipline and command over masses." },
+            { name: "Raja Yoga", rank: "Major", category: "Power", nature: "Auspicious",
+              formation: "The lord of a kendra (1,4,7,10) associates with the lord of a trikona (1,5,9) by conjunction, mutual aspect or exchange",
+              effects: "Power, high status, success and rise in life during the planets' dashas." },
+            { name: "Dhana Yoga", rank: "Major", category: "Wealth", nature: "Auspicious",
+              formation: "Lords of the wealth houses (2nd, 5th, 9th, 11th) connect with each other or with the Lagna lord",
+              effects: "Accumulation of wealth and financial prosperity." },
+            { name: "Viparita Raja Yoga", rank: "Major", category: "Power", nature: "Auspicious",
+              formation: "Lords of the dusthanas (6th, 8th, 12th) occupy other dusthana houses",
+              effects: "Sudden rise and success that comes through or after adversity." },
+            { name: "Neecha Bhanga Raja Yoga", rank: "Major", category: "Power", nature: "Auspicious",
+              formation: "A debilitated planet's weakness is cancelled, e.g. its dispositor is in a kendra from the Moon or Lagna",
+              effects: "Early struggles transform into a remarkable rise and achievement." },
+            { name: "Budha-Aditya Yoga", rank: "Major", category: "Solar", nature: "Auspicious",
+              formation: "Sun and Mercury conjunct in the same sign (Mercury not combust)",
+              effects: "Intelligence, analytical skill, administrative ability and good reputation." },
+            { name: "Chandra-Mangala Yoga", rank: "Major", category: "Lunar", nature: "Auspicious",
+              formation: "Moon and Mars conjunct or in mutual aspect",
+              effects: "Strong earning ability, entrepreneurship and material drive." },
+            { name: "Parivartana Yoga", rank: "Major", category: "Exchange", nature: "Mixed",
+              formation: "Two planets occupy each other's signs (mutual exchange of sign lords)",
+              effects: "The two houses involved become strongly linked; results depend on the houses exchanged." },
+            // --- Secondary Yogas ---
+            { name: "Sunapha Yoga", rank: "Secondary", category: "Lunar", nature: "Auspicious",
+              formation: "A planet (other than the Sun) occupies the 2nd house from the Moon",
+              effects: "Self-earned wealth, intelligence and a good reputation." },
+            { name: "Anapha Yoga", rank: "Secondary", category: "Lunar", nature: "Auspicious",
+              formation: "A planet (other than the Sun) occupies the 12th house from the Moon",
+              effects: "Good health, virtuous character and contentment." },
+            { name: "Durudhara Yoga", rank: "Secondary", category: "Lunar", nature: "Auspicious",
+              formation: "Planets (other than the Sun) occupy both the 2nd and 12th houses from the Moon",
+              effects: "Wealth, comforts, vehicles and generosity." },
+            { name: "Kemadruma Yoga", rank: "Secondary", category: "Lunar", nature: "Challenging",
+              formation: "No planets (other than the Sun) in the 2nd or 12th from the Moon, and the Moon unaspected",
+              effects: "Struggles, loneliness and fluctuating fortunes unless cancelled by other factors." },
+            { name: "Vesi Yoga", rank: "Secondary", category: "Solar", nature: "Auspicious",
+              formation: "A planet (other than the Moon) occupies the 2nd house from the Sun",
+              effects: "Truthfulness, balanced outlook and steady prosperity." },
+            { name: "Vasi Yoga", rank: "Secondary", category: "Solar", nature: "Auspicious",
+              formation: "A planet (other than the Moon) occupies the 12th house from the Sun",
+              effects: "Charitable nature, skill and influence in one's circle." },
+            { name: "Ubhayachari Yoga", rank: "Secondary", category: "Solar", nature: "Auspicious",
+              formation: "Planets (other than the Moon) occupy both the 2nd and 12th houses from the Sun",
+              effects: "All-round prosperity, eloquence and a pleasing personality." },
+            { name: "Adhi Yoga", rank: "Secondary", category: "Lunar", nature: "Auspicious",
+              formation: "Benefics (Mercury, Jupiter, Venus) occupy the 6th, 7th and 8th houses from the Moon",
+              effects: "Leadership, victory over opponents, health and prosperity." },
+            { name: "Amala Yoga", rank: "Secondary", category: "Career", nature: "Auspicious",
+              formation: "A natural benefic occupies the 10th house from the Lagna or the Moon",
+              effects: "Spotless reputation, ethical career and lasting fame." },
+            { name: "Lakshmi Yoga", rank: "Secondary", category: "Wealth", nature: "Auspicious",
+              formation: "The 9th lord is strong in a kendra or trikona in its own or exaltation sign, with a strong Lagna lord",
+              effects: "Wealth, beauty, fortune and the blessings of Lakshmi." },
+            { name: "Saraswati Yoga", rank: "Secondary", category: "Learning", nature: "Auspicious",
+              formation: "Jupiter, Venus and Mercury occupy kendras, trikonas or the 2nd house, with Jupiter strong",
+              effects: "Learning, eloquence, mastery of arts and sciences, and renown as a scholar." },
+            { name: "Shakata Yoga", rank: "Secondary", category: "Lunar", nature: "Challenging",
+              formation: "The Moon is in the 6th, 8th or 12th house from Jupiter",
+              effects: "Fluctuating fortunes — periodic rises and falls in life." },
+            { name: "Kala Sarpa Yoga", rank: "Secondary", category: "Nodal", nature: "Challenging",
+              formation: "All seven classical planets are hemmed between Rahu and Ketu",
+              effects: "An intense, karmic life path with dramatic ups and downs; can confer greatness after struggle." }
         ];
 
         // Mapping South Indian Grid Order (Start top-left-ish)
@@ -287,6 +406,187 @@
         function exitGuide() {
             document.getElementById('studyMode').classList.remove('hidden');
             document.getElementById('guideMode').classList.add('hidden');
+        }
+
+        const grahas = [
+            { name: "Sun", sans: "Surya", nature: "Malefic", signifies: "Soul, father, authority, vitality, government",
+              own: "Leo", exalt: "Aries 10°", debil: "Libra 10°", friends: "Moon, Mars, Jupiter", enemies: "Venus, Saturn" },
+            { name: "Moon", sans: "Chandra", nature: "Benefic (waxing)", signifies: "Mind, mother, emotions, the public, nourishment",
+              own: "Cancer", exalt: "Taurus 3°", debil: "Scorpio 3°", friends: "Sun, Mercury", enemies: "None" },
+            { name: "Mars", sans: "Mangala", nature: "Malefic", signifies: "Energy, courage, siblings, land, conflict",
+              own: "Aries, Scorpio", exalt: "Capricorn 28°", debil: "Cancer 28°", friends: "Sun, Moon, Jupiter", enemies: "Mercury" },
+            { name: "Mercury", sans: "Budha", nature: "Benefic (neutral)", signifies: "Intellect, speech, commerce, learning, humor",
+              own: "Gemini, Virgo", exalt: "Virgo 15°", debil: "Pisces 15°", friends: "Sun, Venus", enemies: "Moon" },
+            { name: "Jupiter", sans: "Guru / Brihaspati", nature: "Great Benefic", signifies: "Wisdom, children, fortune, dharma, teachers",
+              own: "Sagittarius, Pisces", exalt: "Cancer 5°", debil: "Capricorn 5°", friends: "Sun, Moon, Mars", enemies: "Mercury, Venus" },
+            { name: "Venus", sans: "Shukra", nature: "Benefic", signifies: "Love, marriage, arts, luxury, vehicles",
+              own: "Taurus, Libra", exalt: "Pisces 27°", debil: "Virgo 27°", friends: "Mercury, Saturn", enemies: "Sun, Moon" },
+            { name: "Saturn", sans: "Shani", nature: "Malefic", signifies: "Discipline, longevity, karma, labor, sorrow",
+              own: "Capricorn, Aquarius", exalt: "Libra 20°", debil: "Aries 20°", friends: "Mercury, Venus", enemies: "Sun, Moon, Mars" },
+            { name: "Rahu", sans: "North Node", nature: "Malefic (shadow)", signifies: "Obsession, foreign lands, illusion, ambition, technology",
+              own: "— (shadow planet)", exalt: "Taurus", debil: "Scorpio", friends: "Venus, Saturn, Mercury", enemies: "Sun, Moon, Mars" },
+            { name: "Ketu", sans: "South Node", nature: "Malefic (shadow)", signifies: "Moksha, detachment, spirituality, past-life karma",
+              own: "— (shadow planet)", exalt: "Scorpio", debil: "Taurus", friends: "Mars, Venus, Saturn", enemies: "Sun, Moon" }
+        ];
+
+        const dashaOrder = [
+            { lord: "Ketu", years: 7 }, { lord: "Venus", years: 20 }, { lord: "Sun", years: 6 },
+            { lord: "Moon", years: 10 }, { lord: "Mars", years: 7 }, { lord: "Rahu", years: 18 },
+            { lord: "Jupiter", years: 16 }, { lord: "Saturn", years: 19 }, { lord: "Mercury", years: 17 }
+        ];
+
+        const houses = [
+            { num: 1, sans: "Tanu Bhava", category: "Kendra & Trikona", signifies: "Self, body, personality, appearance, overall life direction" },
+            { num: 2, sans: "Dhana Bhava", category: "Maraka", signifies: "Wealth, speech, family, food, accumulated resources" },
+            { num: 3, sans: "Sahaja Bhava", category: "Upachaya", signifies: "Courage, younger siblings, communication, self-effort" },
+            { num: 4, sans: "Sukha Bhava", category: "Kendra", signifies: "Home, mother, comforts, vehicles, inner peace, education" },
+            { num: 5, sans: "Putra Bhava", category: "Trikona", signifies: "Children, creativity, intelligence, romance, past-life merit" },
+            { num: 6, sans: "Ari Bhava", category: "Dusthana & Upachaya", signifies: "Enemies, disease, debts, service, daily work, competition" },
+            { num: 7, sans: "Kalatra Bhava", category: "Kendra & Maraka", signifies: "Marriage, partnerships, business, the other person" },
+            { num: 8, sans: "Randhra Bhava", category: "Dusthana", signifies: "Longevity, transformation, occult, inheritance, sudden events" },
+            { num: 9, sans: "Dharma Bhava", category: "Trikona", signifies: "Fortune, dharma, guru, father, higher learning, long journeys" },
+            { num: 10, sans: "Karma Bhava", category: "Kendra & Upachaya", signifies: "Career, status, public life, authority, achievements" },
+            { num: 11, sans: "Labha Bhava", category: "Upachaya", signifies: "Gains, income, friends, elder siblings, aspirations" },
+            { num: 12, sans: "Vyaya Bhava", category: "Dusthana", signifies: "Loss, expenses, foreign lands, isolation, sleep, moksha" }
+        ];
+
+        const aspects = [
+            { name: "General Rule", detail: "Every planet casts a full aspect (drishti) on the 7th house from itself." },
+            { name: "Sun, Moon, Mercury, Venus", detail: "Aspect only the 7th house from their position." },
+            { name: "Mars (special)", detail: "Aspects the 4th, 7th and 8th houses from itself." },
+            { name: "Jupiter (special)", detail: "Aspects the 5th, 7th and 9th houses from itself — considered protective wherever it falls." },
+            { name: "Saturn (special)", detail: "Aspects the 3rd, 7th and 10th houses from itself — brings discipline or delay there." },
+            { name: "Rahu & Ketu", detail: "In many traditions the nodes aspect the 5th, 7th and 9th houses from themselves." }
+        ];
+
+        // --- GENERIC MODULE VIEWER ---
+        function openModule(title, intro, cards) {
+            document.getElementById('studyMode').classList.add('hidden');
+            document.getElementById('moduleMode').classList.remove('hidden');
+            document.getElementById('moduleTitle').innerText = title;
+            document.getElementById('moduleIntro').innerHTML = intro;
+
+            const list = document.getElementById('moduleList');
+            list.innerHTML = '';
+            cards.forEach(c => {
+                const card = document.createElement('div');
+                card.className = 'nak-card';
+                card.innerHTML = `<h4>${c.title} <span class="nak-degrees">${c.sub || ''}</span></h4>${c.body}`;
+                list.appendChild(card);
+            });
+        }
+
+        function exitModule() {
+            document.getElementById('studyMode').classList.remove('hidden');
+            document.getElementById('moduleMode').classList.add('hidden');
+        }
+
+        function showGrahaModule() {
+            openModule("The 9 Grahas", "The nine planets of Jyotish and their key dignities.", grahas.map(g => ({
+                title: `${g.name} (${g.sans})`, sub: g.nature,
+                body: `<strong>Signifies:</strong> ${g.signifies}<br>
+                       <strong>Own Sign(s):</strong> ${g.own}<br>
+                       <strong>Exaltation:</strong> ${g.exalt} &nbsp; <strong>Debilitation:</strong> ${g.debil}<br>
+                       <strong>Friends:</strong> ${g.friends} &nbsp; <strong>Enemies:</strong> ${g.enemies}`
+            })));
+        }
+
+        function showDashaModule() {
+            const intro = `The Vimshottari Dasha is a 120-year cycle of planetary periods.
+                The sequence begins from the lord of the Moon's nakshatra at birth and
+                then follows the fixed order below.`;
+            openModule("Vimshottari Dasha", intro, dashaOrder.map((d, i) => ({
+                title: `${i + 1}. ${d.lord}`, sub: `${d.years} years`,
+                body: `Mahadasha of ${d.lord} lasts <strong>${d.years} years</strong>.`
+            })).concat([{
+                title: "Total Cycle", sub: "120 years",
+                body: "7 + 20 + 6 + 10 + 7 + 18 + 16 + 19 + 17 = <strong>120 years</strong>. Each mahadasha is subdivided into antardashas of all nine planets in the same order, starting with its own."
+            }]));
+        }
+
+        function showHouseModule() {
+            openModule("The 12 Houses (Bhavas)",
+                "Kendras (1,4,7,10) give strength, Trikonas (1,5,9) give fortune, Dusthanas (6,8,12) bring challenges, Upachayas (3,6,10,11) improve with time.",
+                houses.map(h => ({
+                    title: `House ${h.num} — ${h.sans}`, sub: h.category,
+                    body: `<strong>Signifies:</strong> ${h.signifies}`
+                })));
+        }
+
+        function showAspectModule() {
+            openModule("Planetary Aspects (Drishti)",
+                "A planet influences the houses and planets it aspects. Count houses inclusively from the planet's position.",
+                aspects.map(a => ({ title: a.name, sub: '', body: a.detail })));
+        }
+
+        // --- YOGA MODULE ---
+        function showYogaModule() {
+            document.getElementById('studyMode').classList.add('hidden');
+            document.getElementById('yogaMode').classList.remove('hidden');
+            renderYogaList('Major');
+        }
+
+        function renderYogaList(rank) {
+            const list = document.getElementById('yogaList');
+            list.innerHTML = '';
+
+            yogas.filter(y => y.rank === rank).forEach(y => {
+                const card = document.createElement('div');
+                card.className = 'nak-card';
+                const natureColor = y.nature === 'Challenging' ? '#a52a2a' : (y.nature === 'Mixed' ? '#b8860b' : '#2e7d32');
+                card.innerHTML = `
+                    <h4>${y.name} <span class="nak-degrees">${y.category}</span></h4>
+                    <strong>Nature:</strong> <span style="color:${natureColor}">${y.nature}</span><br>
+                    <strong>Formation:</strong> ${y.formation}<br>
+                    <strong>Effects:</strong> ${y.effects}
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function exitYogaModule() {
+            document.getElementById('studyMode').classList.remove('hidden');
+            document.getElementById('yogaMode').classList.add('hidden');
+        }
+
+        // --- YOGA QUIZ ---
+        function startYogaQuiz() {
+            document.getElementById('studyMode').classList.add('hidden');
+            document.getElementById('yogaQuizMode').classList.remove('hidden');
+            nextYogaQuestion();
+        }
+
+        function nextYogaQuestion() {
+            const quest = yogas[Math.floor(Math.random() * yogas.length)];
+            document.getElementById('yogaQuestionText').innerHTML = `Which yoga is formed when <b>${quest.formation.toLowerCase()}</b>?`;
+
+            const container = document.getElementById('yogaOptionsContainer');
+            container.innerHTML = '';
+
+            const wrong = yogas.filter(y => y.name !== quest.name)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3);
+            const options = [quest, ...wrong].sort(() => Math.random() - 0.5);
+
+            options.forEach(y => {
+                const opt = document.createElement('div');
+                opt.className = 'quiz-option';
+                opt.innerText = y.name;
+                opt.onclick = () => {
+                    if(y.name === quest.name) {
+                        alert(`Correct! ${quest.name} (${quest.nature})\nEffects: ${quest.effects}`);
+                        nextYogaQuestion();
+                    } else {
+                        alert("Try again!");
+                    }
+                };
+                container.appendChild(opt);
+            });
+        }
+
+        function exitYogaQuiz() {
+            document.getElementById('studyMode').classList.remove('hidden');
+            document.getElementById('yogaQuizMode').classList.add('hidden');
         }
 
         // --- QUIZ LOGIC ---
