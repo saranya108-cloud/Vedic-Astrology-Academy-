@@ -164,6 +164,21 @@
                 <h4 style="margin-bottom:4px">Module 2: Planetary Yogas</h4>
                 <button onclick="showYogaModule()">Explore Planetary Yogas</button>
                 <button onclick="startYogaQuiz()">Start Yoga Quiz</button>
+                <h4 style="margin-bottom:4px">Module 3: The 9 Grahas</h4>
+                <button onclick="showGrahaModule()">Explore the Grahas</button>
+                <h4 style="margin-bottom:4px">Module 4: Vimshottari Dasha</h4>
+                <button onclick="showDashaModule()">Explore the Dasha System</button>
+                <h4 style="margin-bottom:4px">Module 5: The 12 Houses</h4>
+                <button onclick="showHouseModule()">Explore the Bhavas</button>
+                <h4 style="margin-bottom:4px">Module 6: Planetary Aspects</h4>
+                <button onclick="showAspectModule()">Explore Drishti</button>
+            </div>
+
+            <div id="moduleMode" class="hidden">
+                <h3 id="moduleTitle"></h3>
+                <p id="moduleIntro" style="font-size:13px"></p>
+                <div id="moduleList" class="nak-list"></div>
+                <button onclick="exitModule()" style="background:#777">Back to Study</button>
             </div>
 
             <div id="guideMode" class="hidden">
@@ -391,6 +406,117 @@
         function exitGuide() {
             document.getElementById('studyMode').classList.remove('hidden');
             document.getElementById('guideMode').classList.add('hidden');
+        }
+
+        const grahas = [
+            { name: "Sun", sans: "Surya", nature: "Malefic", signifies: "Soul, father, authority, vitality, government",
+              own: "Leo", exalt: "Aries 10°", debil: "Libra 10°", friends: "Moon, Mars, Jupiter", enemies: "Venus, Saturn" },
+            { name: "Moon", sans: "Chandra", nature: "Benefic (waxing)", signifies: "Mind, mother, emotions, the public, nourishment",
+              own: "Cancer", exalt: "Taurus 3°", debil: "Scorpio 3°", friends: "Sun, Mercury", enemies: "None" },
+            { name: "Mars", sans: "Mangala", nature: "Malefic", signifies: "Energy, courage, siblings, land, conflict",
+              own: "Aries, Scorpio", exalt: "Capricorn 28°", debil: "Cancer 28°", friends: "Sun, Moon, Jupiter", enemies: "Mercury" },
+            { name: "Mercury", sans: "Budha", nature: "Benefic (neutral)", signifies: "Intellect, speech, commerce, learning, humor",
+              own: "Gemini, Virgo", exalt: "Virgo 15°", debil: "Pisces 15°", friends: "Sun, Venus", enemies: "Moon" },
+            { name: "Jupiter", sans: "Guru / Brihaspati", nature: "Great Benefic", signifies: "Wisdom, children, fortune, dharma, teachers",
+              own: "Sagittarius, Pisces", exalt: "Cancer 5°", debil: "Capricorn 5°", friends: "Sun, Moon, Mars", enemies: "Mercury, Venus" },
+            { name: "Venus", sans: "Shukra", nature: "Benefic", signifies: "Love, marriage, arts, luxury, vehicles",
+              own: "Taurus, Libra", exalt: "Pisces 27°", debil: "Virgo 27°", friends: "Mercury, Saturn", enemies: "Sun, Moon" },
+            { name: "Saturn", sans: "Shani", nature: "Malefic", signifies: "Discipline, longevity, karma, labor, sorrow",
+              own: "Capricorn, Aquarius", exalt: "Libra 20°", debil: "Aries 20°", friends: "Mercury, Venus", enemies: "Sun, Moon, Mars" },
+            { name: "Rahu", sans: "North Node", nature: "Malefic (shadow)", signifies: "Obsession, foreign lands, illusion, ambition, technology",
+              own: "— (shadow planet)", exalt: "Taurus", debil: "Scorpio", friends: "Venus, Saturn, Mercury", enemies: "Sun, Moon, Mars" },
+            { name: "Ketu", sans: "South Node", nature: "Malefic (shadow)", signifies: "Moksha, detachment, spirituality, past-life karma",
+              own: "— (shadow planet)", exalt: "Scorpio", debil: "Taurus", friends: "Mars, Venus, Saturn", enemies: "Sun, Moon" }
+        ];
+
+        const dashaOrder = [
+            { lord: "Ketu", years: 7 }, { lord: "Venus", years: 20 }, { lord: "Sun", years: 6 },
+            { lord: "Moon", years: 10 }, { lord: "Mars", years: 7 }, { lord: "Rahu", years: 18 },
+            { lord: "Jupiter", years: 16 }, { lord: "Saturn", years: 19 }, { lord: "Mercury", years: 17 }
+        ];
+
+        const houses = [
+            { num: 1, sans: "Tanu Bhava", category: "Kendra & Trikona", signifies: "Self, body, personality, appearance, overall life direction" },
+            { num: 2, sans: "Dhana Bhava", category: "Maraka", signifies: "Wealth, speech, family, food, accumulated resources" },
+            { num: 3, sans: "Sahaja Bhava", category: "Upachaya", signifies: "Courage, younger siblings, communication, self-effort" },
+            { num: 4, sans: "Sukha Bhava", category: "Kendra", signifies: "Home, mother, comforts, vehicles, inner peace, education" },
+            { num: 5, sans: "Putra Bhava", category: "Trikona", signifies: "Children, creativity, intelligence, romance, past-life merit" },
+            { num: 6, sans: "Ari Bhava", category: "Dusthana & Upachaya", signifies: "Enemies, disease, debts, service, daily work, competition" },
+            { num: 7, sans: "Kalatra Bhava", category: "Kendra & Maraka", signifies: "Marriage, partnerships, business, the other person" },
+            { num: 8, sans: "Randhra Bhava", category: "Dusthana", signifies: "Longevity, transformation, occult, inheritance, sudden events" },
+            { num: 9, sans: "Dharma Bhava", category: "Trikona", signifies: "Fortune, dharma, guru, father, higher learning, long journeys" },
+            { num: 10, sans: "Karma Bhava", category: "Kendra & Upachaya", signifies: "Career, status, public life, authority, achievements" },
+            { num: 11, sans: "Labha Bhava", category: "Upachaya", signifies: "Gains, income, friends, elder siblings, aspirations" },
+            { num: 12, sans: "Vyaya Bhava", category: "Dusthana", signifies: "Loss, expenses, foreign lands, isolation, sleep, moksha" }
+        ];
+
+        const aspects = [
+            { name: "General Rule", detail: "Every planet casts a full aspect (drishti) on the 7th house from itself." },
+            { name: "Sun, Moon, Mercury, Venus", detail: "Aspect only the 7th house from their position." },
+            { name: "Mars (special)", detail: "Aspects the 4th, 7th and 8th houses from itself." },
+            { name: "Jupiter (special)", detail: "Aspects the 5th, 7th and 9th houses from itself — considered protective wherever it falls." },
+            { name: "Saturn (special)", detail: "Aspects the 3rd, 7th and 10th houses from itself — brings discipline or delay there." },
+            { name: "Rahu & Ketu", detail: "In many traditions the nodes aspect the 5th, 7th and 9th houses from themselves." }
+        ];
+
+        // --- GENERIC MODULE VIEWER ---
+        function openModule(title, intro, cards) {
+            document.getElementById('studyMode').classList.add('hidden');
+            document.getElementById('moduleMode').classList.remove('hidden');
+            document.getElementById('moduleTitle').innerText = title;
+            document.getElementById('moduleIntro').innerHTML = intro;
+
+            const list = document.getElementById('moduleList');
+            list.innerHTML = '';
+            cards.forEach(c => {
+                const card = document.createElement('div');
+                card.className = 'nak-card';
+                card.innerHTML = `<h4>${c.title} <span class="nak-degrees">${c.sub || ''}</span></h4>${c.body}`;
+                list.appendChild(card);
+            });
+        }
+
+        function exitModule() {
+            document.getElementById('studyMode').classList.remove('hidden');
+            document.getElementById('moduleMode').classList.add('hidden');
+        }
+
+        function showGrahaModule() {
+            openModule("The 9 Grahas", "The nine planets of Jyotish and their key dignities.", grahas.map(g => ({
+                title: `${g.name} (${g.sans})`, sub: g.nature,
+                body: `<strong>Signifies:</strong> ${g.signifies}<br>
+                       <strong>Own Sign(s):</strong> ${g.own}<br>
+                       <strong>Exaltation:</strong> ${g.exalt} &nbsp; <strong>Debilitation:</strong> ${g.debil}<br>
+                       <strong>Friends:</strong> ${g.friends} &nbsp; <strong>Enemies:</strong> ${g.enemies}`
+            })));
+        }
+
+        function showDashaModule() {
+            const intro = `The Vimshottari Dasha is a 120-year cycle of planetary periods.
+                The sequence begins from the lord of the Moon's nakshatra at birth and
+                then follows the fixed order below.`;
+            openModule("Vimshottari Dasha", intro, dashaOrder.map((d, i) => ({
+                title: `${i + 1}. ${d.lord}`, sub: `${d.years} years`,
+                body: `Mahadasha of ${d.lord} lasts <strong>${d.years} years</strong>.`
+            })).concat([{
+                title: "Total Cycle", sub: "120 years",
+                body: "7 + 20 + 6 + 10 + 7 + 18 + 16 + 19 + 17 = <strong>120 years</strong>. Each mahadasha is subdivided into antardashas of all nine planets in the same order, starting with its own."
+            }]));
+        }
+
+        function showHouseModule() {
+            openModule("The 12 Houses (Bhavas)",
+                "Kendras (1,4,7,10) give strength, Trikonas (1,5,9) give fortune, Dusthanas (6,8,12) bring challenges, Upachayas (3,6,10,11) improve with time.",
+                houses.map(h => ({
+                    title: `House ${h.num} — ${h.sans}`, sub: h.category,
+                    body: `<strong>Signifies:</strong> ${h.signifies}`
+                })));
+        }
+
+        function showAspectModule() {
+            openModule("Planetary Aspects (Drishti)",
+                "A planet influences the houses and planets it aspects. Count houses inclusively from the planet's position.",
+                aspects.map(a => ({ title: a.name, sub: '', body: a.detail })));
         }
 
         // --- YOGA MODULE ---
