@@ -115,6 +115,32 @@
         .quiz-option:hover { background: var(--gold); }
 
         .hidden { display: none; }
+
+        .nak-list {
+            max-height: 420px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+
+        .nak-card {
+            border: 1px solid #d2b48c;
+            border-left: 4px solid var(--gold);
+            border-radius: 4px;
+            padding: 8px 10px;
+            margin: 6px 0;
+            font-size: 13px;
+        }
+
+        .nak-card h4 {
+            margin: 0 0 4px;
+            color: var(--accent);
+        }
+
+        .nak-card .nak-degrees {
+            color: #777;
+            font-weight: normal;
+            font-size: 11px;
+        }
     </style>
 </head>
 <body>
@@ -133,6 +159,13 @@
                 <h3>Lesson: Reading the Chart</h3>
                 <p id="lessonText">Select a box in the chart to learn about the Sign, House, and Ruler.</p>
                 <button onclick="startNakshatraQuiz()">Start Nakshatra Quiz</button>
+                <button onclick="showNakshatraGuide()">Explore the 27 Nakshatras</button>
+            </div>
+
+            <div id="guideMode" class="hidden">
+                <h3>The 27 Nakshatras</h3>
+                <div id="nakshatraList" class="nak-list"></div>
+                <button onclick="exitGuide()" style="background:#777">Back to Study</button>
             </div>
 
             <div id="quizMode" class="hidden">
@@ -155,11 +188,33 @@
         ];
 
         const nakshatras = [
-            { name: "Ashwini", symbol: "Horse Head", deity: "Ashwini Kumaras" },
-            { name: "Bharani", symbol: "Yoni", deity: "Yama" },
-            { name: "Pushya", symbol: "Flower", deity: "Brihaspati" },
-            { name: "Magha", symbol: "Throne", deity: "Pitris" },
-            { name: "Chitra", symbol: "Jewel", deity: "Vishvakarma" }
+            { name: "Ashwini", symbol: "Horse's Head", deity: "Ashwini Kumaras", ruler: "Ketu", degrees: "0°00' – 13°20' Aries" },
+            { name: "Bharani", symbol: "Yoni (Womb)", deity: "Yama", ruler: "Venus", degrees: "13°20' – 26°40' Aries" },
+            { name: "Krittika", symbol: "Razor, Flame", deity: "Agni", ruler: "Sun", degrees: "26°40' Aries – 10°00' Taurus" },
+            { name: "Rohini", symbol: "Chariot, Banyan Tree", deity: "Brahma", ruler: "Moon", degrees: "10°00' – 23°20' Taurus" },
+            { name: "Mrigashira", symbol: "Deer's Head", deity: "Soma", ruler: "Mars", degrees: "23°20' Taurus – 6°40' Gemini" },
+            { name: "Ardra", symbol: "Teardrop, Diamond", deity: "Rudra", ruler: "Rahu", degrees: "6°40' – 20°00' Gemini" },
+            { name: "Punarvasu", symbol: "Bow and Quiver", deity: "Aditi", ruler: "Jupiter", degrees: "20°00' Gemini – 3°20' Cancer" },
+            { name: "Pushya", symbol: "Cow's Udder, Lotus, Flower", deity: "Brihaspati", ruler: "Saturn", degrees: "3°20' – 16°40' Cancer" },
+            { name: "Ashlesha", symbol: "Coiled Serpent", deity: "Nagas", ruler: "Mercury", degrees: "16°40' – 30°00' Cancer" },
+            { name: "Magha", symbol: "Royal Throne", deity: "Pitris", ruler: "Ketu", degrees: "0°00' – 13°20' Leo" },
+            { name: "Purva Phalguni", symbol: "Hammock, Front Legs of a Bed", deity: "Bhaga", ruler: "Venus", degrees: "13°20' – 26°40' Leo" },
+            { name: "Uttara Phalguni", symbol: "Back Legs of a Bed", deity: "Aryaman", ruler: "Sun", degrees: "26°40' Leo – 10°00' Virgo" },
+            { name: "Hasta", symbol: "Hand, Fist", deity: "Savitar", ruler: "Moon", degrees: "10°00' – 23°20' Virgo" },
+            { name: "Chitra", symbol: "Bright Jewel, Pearl", deity: "Vishvakarma", ruler: "Mars", degrees: "23°20' Virgo – 6°40' Libra" },
+            { name: "Swati", symbol: "Young Sprout in Wind, Coral", deity: "Vayu", ruler: "Rahu", degrees: "6°40' – 20°00' Libra" },
+            { name: "Vishakha", symbol: "Triumphal Arch, Potter's Wheel", deity: "Indra-Agni", ruler: "Jupiter", degrees: "20°00' Libra – 3°20' Scorpio" },
+            { name: "Anuradha", symbol: "Lotus, Triumphal Archway", deity: "Mitra", ruler: "Saturn", degrees: "3°20' – 16°40' Scorpio" },
+            { name: "Jyeshtha", symbol: "Earring, Umbrella, Talisman", deity: "Indra", ruler: "Mercury", degrees: "16°40' – 30°00' Scorpio" },
+            { name: "Mula", symbol: "Bundle of Roots, Tied Bunch", deity: "Nirriti", ruler: "Ketu", degrees: "0°00' – 13°20' Sagittarius" },
+            { name: "Purva Ashadha", symbol: "Winnowing Fan, Elephant Tusk", deity: "Apas", ruler: "Venus", degrees: "13°20' – 26°40' Sagittarius" },
+            { name: "Uttara Ashadha", symbol: "Elephant Tusk, Planks of a Bed", deity: "Vishvadevas", ruler: "Sun", degrees: "26°40' Sagittarius – 10°00' Capricorn" },
+            { name: "Shravana", symbol: "Ear, Three Footprints", deity: "Vishnu", ruler: "Moon", degrees: "10°00' – 23°20' Capricorn" },
+            { name: "Dhanishta", symbol: "Drum (Damaru), Flute", deity: "Eight Vasus", ruler: "Mars", degrees: "23°20' Capricorn – 6°40' Aquarius" },
+            { name: "Shatabhisha", symbol: "Empty Circle, 100 Stars", deity: "Varuna", ruler: "Rahu", degrees: "6°40' – 20°00' Aquarius" },
+            { name: "Purva Bhadrapada", symbol: "Sword, Front Legs of a Funeral Cot", deity: "Aja Ekapada", ruler: "Jupiter", degrees: "20°00' Aquarius – 3°20' Pisces" },
+            { name: "Uttara Bhadrapada", symbol: "Twins, Back Legs of a Funeral Cot", deity: "Ahir Budhnya", ruler: "Saturn", degrees: "3°20' – 16°40' Pisces" },
+            { name: "Revati", symbol: "Pair of Fish, Drum", deity: "Pushan", ruler: "Mercury", degrees: "16°40' – 30°00' Pisces" }
         ];
 
         // Mapping South Indian Grid Order (Start top-left-ish)
@@ -208,6 +263,32 @@
             return keys[h];
         }
 
+        // --- NAKSHATRA GUIDE ---
+        function showNakshatraGuide() {
+            document.getElementById('studyMode').classList.add('hidden');
+            document.getElementById('guideMode').classList.remove('hidden');
+
+            const list = document.getElementById('nakshatraList');
+            list.innerHTML = '';
+
+            nakshatras.forEach((n, i) => {
+                const card = document.createElement('div');
+                card.className = 'nak-card';
+                card.innerHTML = `
+                    <h4>${i + 1}. ${n.name} <span class="nak-degrees">${n.degrees}</span></h4>
+                    <strong>Ruling Planet:</strong> ${n.ruler}<br>
+                    <strong>Ruling Deity:</strong> ${n.deity}<br>
+                    <strong>Symbols:</strong> ${n.symbol}
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function exitGuide() {
+            document.getElementById('studyMode').classList.remove('hidden');
+            document.getElementById('guideMode').classList.add('hidden');
+        }
+
         // --- QUIZ LOGIC ---
         function startNakshatraQuiz() {
             document.getElementById('studyMode').classList.add('hidden');
@@ -222,13 +303,19 @@
             const container = document.getElementById('optionsContainer');
             container.innerHTML = '';
 
-            nakshatras.forEach(n => {
+            // Show the correct answer plus 3 random wrong ones, shuffled
+            const wrong = nakshatras.filter(n => n.name !== quest.name)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3);
+            const options = [quest, ...wrong].sort(() => Math.random() - 0.5);
+
+            options.forEach(n => {
                 const opt = document.createElement('div');
                 opt.className = 'quiz-option';
                 opt.innerText = n.name;
                 opt.onclick = () => {
                     if(n.name === quest.name) {
-                        alert("Correct! It's ruled by " + quest.deity);
+                        alert(`Correct! ${quest.name} (${quest.degrees})\nRuling Planet: ${quest.ruler}\nDeity: ${quest.deity}`);
                         nextQuestion();
                     } else {
                         alert("Try again!");
