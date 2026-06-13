@@ -6,26 +6,44 @@
     <title>Vedic Jyotish Academy</title>
     <style>
         :root {
-            --gold: #d4af37;
-            --brown: #5d4037;
-            --cream: #fffaf0;
-            --accent: #a52a2a;
-            --fire: #ffe3d4;
-            --fire-edge: #ff8a5c;
-            --earth: #e3f4e4;
-            --earth-edge: #6abf72;
-            --air: #ddeffd;
-            --air-edge: #5aa9e6;
-            --water: #eae3f8;
-            --water-edge: #9575cd;
+            --cosmic-bg: #0F1027;
+            --cosmic-soft: #1E1B4B;
+            --royal-violet: #4C1D95;
+            --violet-highlight: #7C3AED;
+            --gold: #F59E0B;
+            --soft-gold: #FDE68A;
+            --cream: #FFF7ED;
+            --parchment: #FFFBEB;
+            --lotus-rose: #E11D48;
+            --emerald: #047857;
+            --teal: #0F766E;
+            --dark-text: #1F2937;
+            --light-text: #FEF3C7;
+            --brown: #3B2416;
+            --accent: var(--lotus-rose);
+            --fire: #FFF1D6;
+            --fire-edge: #F59E0B;
+            --earth: #E9F7EF;
+            --earth-edge: #047857;
+            --air: #EAF6F5;
+            --air-edge: #0F766E;
+            --water: #F0E9FF;
+            --water-edge: #7C3AED;
+            --card-shadow: rgba(15, 16, 39, 0.34);
+            --gold-glow: rgba(245, 158, 11, 0.28);
+            --violet-glow: rgba(124, 58, 237, 0.26);
         }
 
         body {
             font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(160deg, #fff7e8 0%, #fcebd8 45%, #f6e0ee 100%);
+            background:
+                radial-gradient(circle at 16% 8%, rgba(124, 58, 237, 0.30), transparent 28%),
+                radial-gradient(circle at 86% 18%, rgba(245, 158, 11, 0.14), transparent 24%),
+                radial-gradient(circle at 74% 88%, rgba(15, 118, 110, 0.18), transparent 28%),
+                linear-gradient(160deg, var(--cosmic-bg) 0%, var(--cosmic-soft) 48%, #140B2D 100%);
             min-height: 100vh;
             margin: 0;
-            color: var(--brown);
+            color: var(--light-text);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -33,11 +51,12 @@
         }
 
         h1 {
-            background: linear-gradient(90deg, #b8860b, #e07b39, #a52a2a);
+            background: linear-gradient(90deg, var(--soft-gold), var(--gold), #FBBF24, var(--lotus-rose));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
+            text-shadow: 0 12px 30px rgba(245, 158, 11, 0.16);
         }
 
         .dashboard {
@@ -55,13 +74,13 @@
             grid-template-rows: repeat(4, 1fr);
             width: 400px;
             height: 400px;
-            border: 3px solid var(--brown);
-            background-color: white;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border: 3px solid rgba(253, 230, 138, 0.78);
+            background-color: var(--parchment);
+            box-shadow: 0 18px 42px var(--card-shadow), 0 0 0 1px rgba(124, 58, 237, 0.22);
         }
 
         .cell {
-            border: 1px solid #d2b48c;
+            border: 1px solid rgba(76, 29, 149, 0.24);
             padding: 5px;
             display: flex;
             flex-direction: column;
@@ -70,9 +89,13 @@
             position: relative;
             cursor: pointer;
             transition: 0.2s;
+            color: var(--dark-text);
         }
 
-        .cell:hover { filter: brightness(0.93); }
+        .cell:hover {
+            filter: saturate(1.08) brightness(0.97);
+            box-shadow: inset 0 0 0 2px rgba(245, 158, 11, 0.42);
+        }
 
         /* Element tints for the 12 signs */
         .element-fire { background-color: var(--fire); }
@@ -87,17 +110,21 @@
             font-size: 11px;
             margin-top: 6px;
             flex-wrap: wrap;
+            color: var(--light-text);
         }
 
         .legend span {
             padding: 2px 8px;
             border-radius: 10px;
+            color: var(--dark-text);
+            border: 1px solid rgba(253, 230, 138, 0.42);
+            box-shadow: 0 4px 12px rgba(15, 16, 39, 0.20);
         }
 
         .empty-center {
             grid-column: 2 / 4;
             grid-row: 2 / 4;
-            background: linear-gradient(135deg, #fffaf0, #ffe9c7);
+            background: linear-gradient(135deg, var(--parchment), #FFF1D6 56%, #FDE68A);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -105,40 +132,49 @@
             text-align: center;
             border: 2px solid var(--gold);
             font-weight: bold;
+            color: var(--royal-violet);
+            box-shadow: inset 0 0 22px rgba(245, 158, 11, 0.20);
         }
 
-        .sign-label { color: var(--accent); font-weight: bold; margin-bottom: 4px; }
+        .sign-label { color: var(--royal-violet); font-weight: bold; margin-bottom: 4px; }
 
         .planet-tag {
-            background: var(--brown);
-            color: white;
+            background: linear-gradient(135deg, var(--royal-violet), var(--cosmic-soft));
+            color: var(--light-text);
             padding: 2px 4px;
             border-radius: 3px;
             margin: 1px;
             font-size: 10px;
+            box-shadow: 0 2px 6px rgba(76, 29, 149, 0.28);
         }
 
-        .lagna-tag { background: var(--gold); color: black; }
+        .lagna-tag { background: linear-gradient(135deg, var(--soft-gold), var(--gold)); color: var(--dark-text); }
 
         /* Quiz & Education Panel */
         .panel {
             width: 400px;
-            background: white;
+            background: linear-gradient(180deg, var(--cream), var(--parchment));
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 6px 14px rgba(93,64,55,0.12);
+            box-shadow: 0 18px 42px var(--card-shadow), 0 0 0 1px rgba(253, 230, 138, 0.30);
             border-top: 5px solid var(--gold);
+            color: var(--dark-text);
+        }
+
+        .panel h3 {
+            color: var(--royal-violet);
+            text-shadow: 0 1px 0 rgba(253, 230, 138, 0.55);
         }
 
         .panel h4 {
-            color: var(--accent);
-            border-bottom: 2px dotted var(--gold);
+            color: var(--lotus-rose);
+            border-bottom: 2px dotted rgba(245, 158, 11, 0.65);
             padding-bottom: 2px;
         }
 
         button {
-            background: linear-gradient(135deg, #8d6e63, #5d4037);
-            color: white;
+            background: linear-gradient(135deg, var(--gold), #B45309);
+            color: #1F1303;
             border: none;
             padding: 10px 20px;
             border-radius: 8px;
@@ -146,30 +182,40 @@
             margin: 5px 0;
             width: 100%;
             transition: 0.2s;
+            box-shadow: 0 8px 18px rgba(245, 158, 11, 0.20);
+            font-weight: 600;
         }
 
-        button:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        button:hover { filter: brightness(1.08) saturate(1.08); transform: translateY(-1px); }
 
         /* Module button colors */
-        .btn-nak { background: linear-gradient(135deg, #ff9d6c, #e0633a); }
-        .btn-yoga { background: linear-gradient(135deg, #ab7fd4, #7e57c2); }
-        .btn-graha { background: linear-gradient(135deg, #4db6ac, #00897b); }
-        .btn-dasha { background: linear-gradient(135deg, #64b5f6, #1976d2); }
-        .btn-house { background: linear-gradient(135deg, #81c784, #43a047); }
-        .btn-aspect { background: linear-gradient(135deg, #f06292, #d81b60); }
+        .btn-nak { background: linear-gradient(135deg, var(--soft-gold), var(--gold)); color: #2B1700; }
+        .btn-yoga { background: linear-gradient(135deg, var(--violet-highlight), var(--royal-violet)); color: var(--light-text); }
+        .btn-graha { background: linear-gradient(135deg, #14B8A6, var(--teal)); color: #ECFDF5; }
+        .btn-dasha { background: linear-gradient(135deg, var(--royal-violet), var(--cosmic-soft)); color: var(--light-text); }
+        .btn-house { background: linear-gradient(135deg, #10B981, var(--emerald)); color: #ECFDF5; }
+        .btn-aspect { background: linear-gradient(135deg, #FB7185, var(--lotus-rose)); color: #FFF1F2; }
+
+        button[style*="background:#777"] {
+            background: linear-gradient(135deg, var(--cosmic-soft), var(--royal-violet)) !important;
+            color: var(--light-text);
+            box-shadow: 0 8px 18px var(--violet-glow);
+        }
 
         .quiz-option {
-            background: linear-gradient(90deg, #fff3e0, #ffe7c2);
+            background: linear-gradient(90deg, var(--parchment), #FEF3C7);
             border-left: 4px solid var(--gold);
             margin: 6px 0;
             padding: 10px;
             border-radius: 6px;
             cursor: pointer;
             transition: 0.2s;
+            color: var(--dark-text);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.10);
         }
 
         .quiz-option:hover {
-            background: linear-gradient(90deg, #ffd54f, #ffb74d);
+            background: linear-gradient(90deg, var(--soft-gold), #FDBA74);
             transform: translateX(4px);
         }
 
@@ -182,28 +228,30 @@
         }
 
         .nak-card {
-            border: 1px solid #e8d5b5;
+            border: 1px solid rgba(245, 158, 11, 0.30);
             border-left: 5px solid var(--gold);
             border-radius: 8px;
             padding: 8px 10px;
             margin: 6px 0;
             font-size: 13px;
-            background: #fffdf8;
+            background: linear-gradient(180deg, var(--parchment), #FFF7ED);
+            color: var(--dark-text);
+            box-shadow: 0 6px 14px rgba(15, 16, 39, 0.08);
         }
 
         /* Rotate friendly accent colors through the cards */
-        .nak-card:nth-child(4n+1) { border-left-color: var(--fire-edge); background: #fff8f4; }
-        .nak-card:nth-child(4n+2) { border-left-color: var(--earth-edge); background: #f6fbf6; }
-        .nak-card:nth-child(4n+3) { border-left-color: var(--air-edge); background: #f4f9fe; }
-        .nak-card:nth-child(4n+4) { border-left-color: var(--water-edge); background: #f9f6fd; }
+        .nak-card:nth-child(4n+1) { border-left-color: var(--fire-edge); background: linear-gradient(180deg, #FFF7ED, #FFF1D6); }
+        .nak-card:nth-child(4n+2) { border-left-color: var(--earth-edge); background: linear-gradient(180deg, #F0FDF4, #ECFDF5); }
+        .nak-card:nth-child(4n+3) { border-left-color: var(--air-edge); background: linear-gradient(180deg, #ECFEFF, #F0FDFA); }
+        .nak-card:nth-child(4n+4) { border-left-color: var(--water-edge); background: linear-gradient(180deg, #F5F3FF, #FFF7ED); }
 
         .nak-card h4 {
             margin: 0 0 4px;
-            color: var(--accent);
+            color: var(--royal-violet);
         }
 
         .nak-card .nak-degrees {
-            color: #777;
+            color: #6B4E16;
             font-weight: normal;
             font-size: 11px;
         }
@@ -606,7 +654,7 @@
             yogas.filter(y => y.rank === rank).forEach(y => {
                 const card = document.createElement('div');
                 card.className = 'nak-card';
-                const natureColor = y.nature === 'Challenging' ? '#a52a2a' : (y.nature === 'Mixed' ? '#b8860b' : '#2e7d32');
+                const natureColor = y.nature === 'Challenging' ? '#E11D48' : (y.nature === 'Mixed' ? '#F59E0B' : '#047857');
                 card.innerHTML = `
                     <h4>${y.name} <span class="nak-degrees">${y.category}</span></h4>
                     <strong>Nature:</strong> <span style="color:${natureColor}">${y.nature}</span><br>
