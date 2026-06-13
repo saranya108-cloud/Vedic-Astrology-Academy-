@@ -37,10 +37,10 @@
         body {
             font-family: 'Segoe UI', sans-serif;
             background:
-                radial-gradient(circle at 16% 8%, rgba(124, 58, 237, 0.30), transparent 28%),
-                radial-gradient(circle at 86% 18%, rgba(245, 158, 11, 0.14), transparent 24%),
-                radial-gradient(circle at 74% 88%, rgba(15, 118, 110, 0.18), transparent 28%),
-                linear-gradient(160deg, var(--cosmic-bg) 0%, var(--cosmic-soft) 48%, #140B2D 100%);
+                radial-gradient(circle at 16% 6%, rgba(225, 29, 72, 0.20), transparent 24%),
+                radial-gradient(circle at 80% 12%, rgba(245, 158, 11, 0.18), transparent 26%),
+                radial-gradient(circle at 72% 88%, rgba(15, 118, 110, 0.22), transparent 28%),
+                linear-gradient(150deg, #050515 0%, #0F1027 32%, #1E1B4B 68%, #2E1065 100%);
             min-height: 100vh;
             margin: 0;
             color: var(--light-text);
@@ -51,12 +51,23 @@
         }
 
         h1 {
-            background: linear-gradient(90deg, var(--soft-gold), var(--gold), #FBBF24, var(--lotus-rose));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            width: min(1000px, calc(100% - 16px));
+            margin: 10px 0 22px;
+            padding: 26px 22px 30px;
+            border: 1px solid rgba(253, 230, 138, 0.42);
+            border-bottom: 4px solid rgba(245, 158, 11, 0.82);
+            border-radius: 16px;
+            background:
+                radial-gradient(circle at 14% 16%, rgba(245, 158, 11, 0.24), transparent 32%),
+                linear-gradient(135deg, rgba(15, 16, 39, 0.98), rgba(46, 16, 101, 0.96) 58%, rgba(76, 29, 149, 0.86));
+            box-shadow: 0 28px 70px rgba(0, 0, 0, 0.46), 0 0 42px rgba(124, 58, 237, 0.28);
+            text-align: center;
+            font-size: clamp(2rem, 4.4vw, 3.8rem);
+            line-height: 1.05;
+            background-color: #0F1027;
+            color: #FFE8A3;
             letter-spacing: 1.2px;
-            text-shadow: 0 12px 30px rgba(245, 158, 11, 0.16);
+            text-shadow: 0 3px 0 rgba(76, 29, 149, 0.85), 0 16px 36px rgba(245, 158, 11, 0.32);
         }
 
         .dashboard {
@@ -65,6 +76,25 @@
             max-width: 1000px;
             flex-wrap: wrap;
             justify-content: center;
+            padding: 26px;
+            border-radius: 18px;
+            background:
+                linear-gradient(135deg, rgba(15, 16, 39, 0.92), rgba(30, 27, 75, 0.96) 52%, rgba(76, 29, 149, 0.82));
+            border: 1px solid rgba(253, 230, 138, 0.28);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(253, 230, 138, 0.14);
+        }
+
+        .dashboard > div:first-child {
+            padding: 18px;
+            border-radius: 14px;
+            background: linear-gradient(180deg, rgba(12, 11, 37, 0.94), rgba(46, 16, 101, 0.82));
+            border: 1px solid rgba(245, 158, 11, 0.36);
+            box-shadow: 0 18px 46px rgba(0, 0, 0, 0.34), 0 0 28px rgba(124, 58, 237, 0.18);
+        }
+
+        .dashboard > div:first-child p {
+            color: #FDE68A;
+            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
         }
 
         /* South Indian Grid Styling */
@@ -74,9 +104,9 @@
             grid-template-rows: repeat(4, 1fr);
             width: 400px;
             height: 400px;
-            border: 3px solid rgba(253, 230, 138, 0.78);
+            border: 4px solid rgba(245, 158, 11, 0.92);
             background-color: var(--parchment);
-            box-shadow: 0 18px 42px var(--card-shadow), 0 0 0 1px rgba(124, 58, 237, 0.22);
+            box-shadow: 0 22px 54px rgba(0, 0, 0, 0.46), 0 0 0 2px rgba(124, 58, 237, 0.42), 0 0 34px rgba(245, 158, 11, 0.18);
         }
 
         .cell {
@@ -117,8 +147,9 @@
             padding: 2px 8px;
             border-radius: 10px;
             color: var(--dark-text);
-            border: 1px solid rgba(253, 230, 138, 0.42);
-            box-shadow: 0 4px 12px rgba(15, 16, 39, 0.20);
+            border: 1px solid rgba(253, 230, 138, 0.70);
+            box-shadow: 0 7px 16px rgba(0, 0, 0, 0.32);
+            font-weight: 700;
         }
 
         .empty-center {
@@ -153,53 +184,74 @@
         /* Quiz & Education Panel */
         .panel {
             width: 400px;
-            background: linear-gradient(180deg, var(--cream), var(--parchment));
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 18px 42px var(--card-shadow), 0 0 0 1px rgba(253, 230, 138, 0.30);
-            border-top: 5px solid var(--gold);
+            background:
+                radial-gradient(circle at 14% 8%, rgba(245, 158, 11, 0.20), transparent 28%),
+                linear-gradient(180deg, #120B2E, #1E1B4B 54%, #2E1065);
+            padding: 14px;
+            border-radius: 14px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.48), 0 0 0 1px rgba(253, 230, 138, 0.38), 0 0 34px rgba(124, 58, 237, 0.24);
+            border-top: 6px solid var(--gold);
             color: var(--dark-text);
         }
 
+        #studyMode,
+        #moduleMode,
+        #guideMode,
+        #yogaMode,
+        #yogaQuizMode,
+        #quizMode {
+            background: linear-gradient(180deg, #FFF7ED, #FFFBEB 72%, #FEF3C7);
+            border: 2px solid rgba(245, 158, 11, 0.62);
+            border-radius: 10px;
+            padding: 16px;
+            box-shadow: inset 0 0 0 1px rgba(124, 58, 237, 0.20), 0 10px 28px rgba(0, 0, 0, 0.22);
+        }
+
         .panel h3 {
-            color: var(--royal-violet);
-            text-shadow: 0 1px 0 rgba(253, 230, 138, 0.55);
+            color: #2E1065;
+            text-shadow: 0 2px 0 rgba(253, 230, 138, 0.72);
+            font-size: 1.38rem;
+            margin-top: 0;
+            border-bottom: 3px double rgba(245, 158, 11, 0.62);
+            padding-bottom: 8px;
         }
 
         .panel h4 {
-            color: var(--lotus-rose);
-            border-bottom: 2px dotted rgba(245, 158, 11, 0.65);
-            padding-bottom: 2px;
+            color: #7F1D1D;
+            border-bottom: 2px dotted rgba(245, 158, 11, 0.78);
+            padding: 8px 0 3px;
+            text-shadow: 0 1px 0 rgba(253, 230, 138, 0.55);
         }
 
         button {
-            background: linear-gradient(135deg, var(--gold), #B45309);
+            background: linear-gradient(135deg, #FBBF24, var(--gold) 48%, #7C2D12);
             color: #1F1303;
-            border: none;
+            border: 1px solid rgba(76, 29, 149, 0.28);
             padding: 10px 20px;
             border-radius: 8px;
             cursor: pointer;
             margin: 5px 0;
             width: 100%;
             transition: 0.2s;
-            box-shadow: 0 8px 18px rgba(245, 158, 11, 0.20);
-            font-weight: 600;
+            box-shadow: 0 10px 20px rgba(76, 29, 149, 0.22), inset 0 1px 0 rgba(255, 247, 237, 0.38);
+            font-weight: 700;
         }
 
         button:hover { filter: brightness(1.08) saturate(1.08); transform: translateY(-1px); }
 
         /* Module button colors */
-        .btn-nak { background: linear-gradient(135deg, var(--soft-gold), var(--gold)); color: #2B1700; }
-        .btn-yoga { background: linear-gradient(135deg, var(--violet-highlight), var(--royal-violet)); color: var(--light-text); }
-        .btn-graha { background: linear-gradient(135deg, #14B8A6, var(--teal)); color: #ECFDF5; }
-        .btn-dasha { background: linear-gradient(135deg, var(--royal-violet), var(--cosmic-soft)); color: var(--light-text); }
-        .btn-house { background: linear-gradient(135deg, #10B981, var(--emerald)); color: #ECFDF5; }
-        .btn-aspect { background: linear-gradient(135deg, #FB7185, var(--lotus-rose)); color: #FFF1F2; }
+        .btn-nak { background: linear-gradient(135deg, #FFF7AD, #F59E0B 54%, #B45309); color: #2B1700; border-color: rgba(245, 158, 11, 0.70); }
+        .btn-yoga { background: linear-gradient(135deg, #A78BFA, #7C3AED 48%, #4C1D95); color: #FEF3C7; border-color: rgba(124, 58, 237, 0.70); }
+        .btn-graha { background: linear-gradient(135deg, #2DD4BF, #0F766E 54%, #134E4A); color: #ECFDF5; border-color: rgba(15, 118, 110, 0.72); }
+        .btn-dasha { background: linear-gradient(135deg, #FBBF24, #7C3AED 46%, #1E1B4B); color: #FFF7ED; border-color: rgba(245, 158, 11, 0.58); }
+        .btn-house { background: linear-gradient(135deg, #34D399, #047857 54%, #064E3B); color: #ECFDF5; border-color: rgba(4, 120, 87, 0.72); }
+        .btn-aspect { background: linear-gradient(135deg, #FB7185, #E11D48 46%, #881337); color: #FFF1F2; border-color: rgba(225, 29, 72, 0.72); }
 
         button[style*="background:#777"] {
-            background: linear-gradient(135deg, var(--cosmic-soft), var(--royal-violet)) !important;
+            background: linear-gradient(135deg, #1E1B4B, #4C1D95 56%, #0F1027) !important;
             color: var(--light-text);
-            box-shadow: 0 8px 18px var(--violet-glow);
+            border-color: rgba(253, 230, 138, 0.42);
+            box-shadow: 0 10px 22px var(--violet-glow);
         }
 
         .quiz-option {
@@ -228,22 +280,22 @@
         }
 
         .nak-card {
-            border: 1px solid rgba(245, 158, 11, 0.30);
-            border-left: 5px solid var(--gold);
+            border: 1px solid rgba(76, 29, 149, 0.36);
+            border-left: 6px solid var(--gold);
             border-radius: 8px;
             padding: 8px 10px;
             margin: 6px 0;
             font-size: 13px;
             background: linear-gradient(180deg, var(--parchment), #FFF7ED);
             color: var(--dark-text);
-            box-shadow: 0 6px 14px rgba(15, 16, 39, 0.08);
+            box-shadow: 0 9px 20px rgba(76, 29, 149, 0.16), 0 0 0 1px rgba(245, 158, 11, 0.14);
         }
 
         /* Rotate friendly accent colors through the cards */
-        .nak-card:nth-child(4n+1) { border-left-color: var(--fire-edge); background: linear-gradient(180deg, #FFF7ED, #FFF1D6); }
-        .nak-card:nth-child(4n+2) { border-left-color: var(--earth-edge); background: linear-gradient(180deg, #F0FDF4, #ECFDF5); }
-        .nak-card:nth-child(4n+3) { border-left-color: var(--air-edge); background: linear-gradient(180deg, #ECFEFF, #F0FDFA); }
-        .nak-card:nth-child(4n+4) { border-left-color: var(--water-edge); background: linear-gradient(180deg, #F5F3FF, #FFF7ED); }
+        .nak-card:nth-child(4n+1) { border-left-color: var(--fire-edge); border-top-color: rgba(245, 158, 11, 0.55); background: linear-gradient(180deg, #FFF7ED, #FFF1D6); }
+        .nak-card:nth-child(4n+2) { border-left-color: var(--earth-edge); border-top-color: rgba(4, 120, 87, 0.46); background: linear-gradient(180deg, #F0FDF4, #ECFDF5); }
+        .nak-card:nth-child(4n+3) { border-left-color: var(--air-edge); border-top-color: rgba(15, 118, 110, 0.46); background: linear-gradient(180deg, #ECFEFF, #F0FDFA); }
+        .nak-card:nth-child(4n+4) { border-left-color: var(--water-edge); border-top-color: rgba(124, 58, 237, 0.48); background: linear-gradient(180deg, #F5F3FF, #FFF7ED); }
 
         .nak-card h4 {
             margin: 0 0 4px;
