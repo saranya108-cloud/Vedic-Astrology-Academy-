@@ -3,6 +3,8 @@
 **Date:** 2026-07-03
 **Method:** Automated real-browser testing (Chromium via Playwright) simulating a real user: clicking every chart cell, opening all six modules, taking both quizzes (including wrong answers), and viewing the app on desktop (1280×900) and mobile (375×812) viewports. Complemented by a code review of `index.html`.
 
+> **Status update (same day):** Findings **1–9** and **11** below have been fixed and re-verified with a 24-check browser test run (all passing): every chart cell now responds to click and keyboard, the layout fits 375px and 320px viewports with no horizontal scroll, both quizzes use inline feedback with a running score and one attempt per question (no `alert()`s anywhere), yoga questions keep their original capitalization, nakshatras sharing a symbol keyword are excluded from each other's options, and the title/spelling/center-label polish items are done. Finding 10 was addressed by relabeling the center "Example Chart"; finding 12 (lesson-change visibility) is mitigated by `aria-live` on the lesson text.
+
 ---
 
 ## 🔴 Critical — functional bug
