@@ -6,7 +6,7 @@ An interactive web-based educational platform for learning Vedic Astrology (Jyot
 
 ### 🔮 Interactive Birth Chart
 - **South Indian Style Chart**: Traditional fixed-sign layout with clockwise house system
-- **12 Zodiac Signs**: Complete with Sanskrit names (Mesha, Vrishaba, etc.)
+- **12 Zodiac Signs**: Complete with Sanskrit names (Mesha, Vrishabha, etc.)
 - **Planetary Positions**: Visual representation of planets and Lagna (Ascendant)
 - **Clickable Learning**: Select any chart cell to learn about:
   - Sign names (English and Sanskrit)
@@ -24,7 +24,7 @@ The academy is organized into six structured modules, each accessible from the s
   - **Ruling deity**
   - **Degree span** in the sidereal zodiac (each spans 13°20')
   - **Associated symbols**, including common alternates
-- **Nakshatra Quiz**: Identify the nakshatra from its symbol (4 shuffled options per question); correct answers reveal the full details
+- **Nakshatra Quiz**: Identify the nakshatra from its symbol (4 shuffled options, one attempt per question) with a running score; every answer reveals the full details
 
 ### ⭐ Module 2: Planetary Yogas
 - **13 Major Yogas**, including:
@@ -36,7 +36,7 @@ The academy is organized into six structured modules, each accessible from the s
   - Sun-based: Vesi, Vasi, Ubhayachari
   - Amala, Lakshmi, Saraswati, Kala Sarpa
 - Each yoga card shows its **formation rule**, **color-coded nature** (auspicious / challenging / mixed), and **effects**
-- **Yoga Quiz**: Identify which yoga is formed by a given planetary combination
+- **Yoga Quiz**: Identify which yoga is formed by a given planetary combination, with one attempt per question and a running score
 
 ### 🪐 Module 3: The 9 Grahas
 - All nine planets of Jyotish: Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, and Ketu
@@ -120,7 +120,7 @@ The South Indian chart uses a 4×4 grid with:
 ## Example Chart
 
 The default chart includes:
-- **Lagna (Ascendant)**: Taurus (Vrishaba)
+- **Lagna (Ascendant)**: Taurus (Vrishabha)
 - **Sun**: Leo (Simha)
 
 This creates a sample birth chart for educational purposes.

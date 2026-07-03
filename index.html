@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vedic Jyotish Academy</title>
+    <title>Vedic Astrology Academy</title>
     <style>
         :root {
             --cosmic-bg: #0F1027;
@@ -125,6 +125,11 @@
         .cell:hover {
             filter: saturate(1.08) brightness(0.97);
             box-shadow: inset 0 0 0 2px rgba(245, 158, 11, 0.42);
+        }
+
+        .cell:focus-visible {
+            outline: 3px solid var(--violet-highlight);
+            outline-offset: -3px;
         }
 
         /* Element tints for the 12 signs */
@@ -255,7 +260,14 @@
         }
 
         .quiz-option {
+            display: block;
+            width: 100%;
+            text-align: left;
+            font: inherit;
+            font-size: 14px;
+            font-weight: normal;
             background: linear-gradient(90deg, var(--parchment), #FEF3C7);
+            border: none;
             border-left: 4px solid var(--gold);
             margin: 6px 0;
             padding: 10px;
@@ -266,12 +278,56 @@
             box-shadow: 0 4px 12px rgba(245, 158, 11, 0.10);
         }
 
-        .quiz-option:hover {
+        .quiz-option:hover { filter: none; transform: none; }
+
+        .quiz-option:not(:disabled):hover {
             background: linear-gradient(90deg, var(--soft-gold), #FDBA74);
             transform: translateX(4px);
         }
 
+        .quiz-option:disabled { cursor: default; }
+
+        .quiz-option.correct {
+            background: linear-gradient(90deg, #D1FAE5, #A7F3D0);
+            border-left-color: var(--emerald);
+            font-weight: 700;
+        }
+
+        .quiz-option.wrong {
+            background: linear-gradient(90deg, #FFE4E6, #FECDD3);
+            border-left-color: var(--lotus-rose);
+        }
+
+        .quiz-score {
+            margin: 0 0 6px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #6B4E16;
+        }
+
+        .quiz-feedback {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: var(--dark-text);
+            background: linear-gradient(180deg, var(--parchment), #FFF7ED);
+            border: 1px solid rgba(76, 29, 149, 0.24);
+            border-left: 5px solid var(--emerald);
+        }
+
+        .quiz-feedback.bad { border-left-color: var(--lotus-rose); }
+
         .hidden { display: none; }
+
+        @media (max-width: 520px) {
+            body { padding: 12px; }
+            h1 { width: 100%; box-sizing: border-box; padding: 18px 14px 22px; }
+            .dashboard { width: 100%; box-sizing: border-box; padding: 14px; gap: 22px; }
+            .dashboard > div:first-child { width: 100%; box-sizing: border-box; padding: 10px; }
+            .jyotish-grid { width: 100%; height: auto; aspect-ratio: 1 / 1; }
+            .panel { width: 100%; box-sizing: border-box; }
+        }
 
         .nak-list {
             max-height: 420px;
@@ -329,7 +385,7 @@
         <div class="panel" id="uiPanel">
             <div id="studyMode">
                 <h3>Lesson: Reading the Chart</h3>
-                <p id="lessonText">Select a box in the chart to learn about the Sign, House, and Ruler.</p>
+                <p id="lessonText" aria-live="polite">Select a box in the chart to learn about the Sign, House, and Ruler.</p>
                 <h4 style="margin-bottom:4px">Module 1: Nakshatras</h4>
                 <button class="btn-nak" onclick="showNakshatraGuide()">🌟 Explore the 27 Nakshatras</button>
                 <button class="btn-nak" onclick="startNakshatraQuiz()">🎯 Start Nakshatra Quiz</button>
@@ -371,15 +427,21 @@
 
             <div id="yogaQuizMode" class="hidden">
                 <h3>Yoga Quiz</h3>
+                <p id="yogaScoreText" class="quiz-score"></p>
                 <p id="yogaQuestionText"></p>
                 <div id="yogaOptionsContainer"></div>
+                <div id="yogaFeedback" class="quiz-feedback hidden" aria-live="polite"></div>
+                <button id="yogaNextBtn" class="hidden" onclick="yogaQuiz.next()">Next Question ➜</button>
                 <button onclick="exitYogaQuiz()" style="background:#777">Back to Study</button>
             </div>
 
             <div id="quizMode" class="hidden">
                 <h3>Nakshatra Quiz</h3>
+                <p id="nakScoreText" class="quiz-score"></p>
                 <p id="questionText"></p>
                 <div id="optionsContainer"></div>
+                <div id="nakFeedback" class="quiz-feedback hidden" aria-live="polite"></div>
+                <button id="nakNextBtn" class="hidden" onclick="nakQuiz.next()">Next Question ➜</button>
                 <button onclick="exitQuiz()" style="background:#777">Back to Study</button>
             </div>
         </div>
@@ -387,7 +449,7 @@
 
     <script>
         const signs = [
-            { name: "Aries", sans: "Mesha", ruler: "Mars" }, { name: "Taurus", sans: "Vrishaba", ruler: "Venus" },
+            { name: "Aries", sans: "Mesha", ruler: "Mars" }, { name: "Taurus", sans: "Vrishabha", ruler: "Venus" },
             { name: "Gemini", sans: "Mithuna", ruler: "Mercury" }, { name: "Cancer", sans: "Karka", ruler: "Moon" },
             { name: "Leo", sans: "Simha", ruler: "Sun" }, { name: "Virgo", sans: "Kanya", ruler: "Mercury" },
             { name: "Libra", sans: "Tula", ruler: "Venus" }, { name: "Scorpio", sans: "Vrischika", ruler: "Mars" },
@@ -517,7 +579,15 @@
 
             gridOrder.forEach((signIdx, i) => {
                 if (signIdx === -1) {
-                    if (i === 5) grid.innerHTML += `<div class="empty-center">MY CHART</div>`;
+                    // Build the center block with appendChild — assigning to
+                    // grid.innerHTML here would re-parse the grid and strip the
+                    // click handlers off the cells already appended.
+                    if (i === 5) {
+                        const center = document.createElement('div');
+                        center.className = 'empty-center';
+                        center.innerHTML = `Example Chart<br><small>Lagna in Vrishabha</small>`;
+                        grid.appendChild(center);
+                    }
                     return;
                 }
 
@@ -532,7 +602,16 @@
                 // Add an example Sun in Leo (Sign 4)
                 if (signIdx === 4) cell.innerHTML += `<span class="planet-tag">Sun</span>`;
 
+                cell.tabIndex = 0;
+                cell.setAttribute('role', 'button');
+                cell.setAttribute('aria-label', `${sign.sans} (${sign.name}), ruled by ${sign.ruler}`);
                 cell.onclick = () => showLesson(signIdx);
+                cell.onkeydown = (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        showLesson(signIdx);
+                    }
+                };
                 grid.appendChild(cell);
             });
         }
@@ -546,8 +625,13 @@
                 <strong>Sign:</strong> ${sign.sans} (${sign.name})<br>
                 <strong>House:</strong> ${house}<br>
                 <strong>Ruler:</strong> ${sign.ruler}<br><br>
-                <em>"The ${house} house in ${sign.name} shows how you handle ${getHouseKeyword(house)}."</em>
+                <em>"The ${ordinal(house)} house in ${sign.name} shows how you handle ${getHouseKeyword(house)}."</em>
             `;
+        }
+
+        function ordinal(n) {
+            const suffix = ["th", "st", "nd", "rd"][(n % 10 <= 3 && Math.floor(n / 10) !== 1) ? n % 10 : 0];
+            return n + suffix;
         }
 
         function getHouseKeyword(h) {
@@ -722,39 +806,116 @@
             document.getElementById('yogaMode').classList.add('hidden');
         }
 
-        // --- YOGA QUIZ ---
+        // --- QUIZ ENGINE ---
+        function shuffle(arr) {
+            const a = arr.slice();
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function makeQuiz(cfg) {
+            let current = null;
+            let lastName = null;
+            let score = { right: 0, asked: 0 };
+
+            function updateScore() {
+                document.getElementById(cfg.scoreId).innerText =
+                    score.asked ? `Score: ${score.right} / ${score.asked}` : 'One attempt per question — good luck!';
+            }
+
+            function next() {
+                document.getElementById(cfg.nextId).classList.add('hidden');
+                document.getElementById(cfg.feedbackId).classList.add('hidden');
+
+                let pick;
+                do {
+                    pick = cfg.pool[Math.floor(Math.random() * cfg.pool.length)];
+                } while (cfg.pool.length > 1 && pick.name === lastName);
+                lastName = pick.name;
+                current = pick;
+
+                updateScore();
+                document.getElementById(cfg.questionId).innerHTML = cfg.question(pick);
+
+                const container = document.getElementById(cfg.optionsId);
+                container.innerHTML = '';
+                const distractors = cfg.pool.filter(o =>
+                    o.name !== pick.name && !(cfg.conflicts && cfg.conflicts(pick, o)));
+                const options = shuffle([pick, ...shuffle(distractors).slice(0, 3)]);
+
+                options.forEach(o => {
+                    const opt = document.createElement('button');
+                    opt.type = 'button';
+                    opt.className = 'quiz-option';
+                    opt.innerText = o.name;
+                    opt.onclick = () => answer(opt, o);
+                    container.appendChild(opt);
+                });
+            }
+
+            function answer(el, choice) {
+                const container = document.getElementById(cfg.optionsId);
+                const correct = choice.name === current.name;
+                score.asked++;
+                if (correct) score.right++;
+
+                [...container.children].forEach(c => {
+                    c.disabled = true;
+                    if (c.innerText === current.name) c.classList.add('correct');
+                });
+                if (!correct) el.classList.add('wrong');
+
+                const fb = document.getElementById(cfg.feedbackId);
+                fb.className = correct ? 'quiz-feedback' : 'quiz-feedback bad';
+                fb.innerHTML = (correct
+                    ? '✅ <strong>Correct!</strong> '
+                    : `❌ Not quite — the answer is <strong>${current.name}</strong>. `) + cfg.detail(current);
+
+                updateScore();
+                document.getElementById(cfg.nextId).classList.remove('hidden');
+            }
+
+            function start() {
+                score = { right: 0, asked: 0 };
+                lastName = null;
+                next();
+            }
+
+            return { start, next };
+        }
+
+        // Some nakshatras share a symbol keyword (e.g. "Elephant Tusk" belongs to
+        // both Purva and Uttara Ashadha) — keep those out of each other's options.
+        function sharesSymbol(a, b) {
+            const parts = s => s.symbol.split(',').map(x => x.trim().toLowerCase());
+            const pa = parts(a);
+            return parts(b).some(x => pa.includes(x));
+        }
+
+        const nakQuiz = makeQuiz({
+            pool: nakshatras,
+            questionId: 'questionText', optionsId: 'optionsContainer',
+            feedbackId: 'nakFeedback', nextId: 'nakNextBtn', scoreId: 'nakScoreText',
+            question: q => `Which Nakshatra is represented by the symbol <b>${q.symbol}</b>?`,
+            detail: q => `${q.name} spans ${q.degrees}. Ruling Planet: ${q.ruler}. Deity: ${q.deity}.`,
+            conflicts: sharesSymbol
+        });
+
+        const yogaQuiz = makeQuiz({
+            pool: yogas,
+            questionId: 'yogaQuestionText', optionsId: 'yogaOptionsContainer',
+            feedbackId: 'yogaFeedback', nextId: 'yogaNextBtn', scoreId: 'yogaScoreText',
+            question: q => `Which yoga is formed by this rule?<br><em>“${q.formation}.”</em>`,
+            detail: q => `${q.name} is ${q.nature.toLowerCase()} (${q.category}). Effects: ${q.effects}`
+        });
+
         function startYogaQuiz() {
             document.getElementById('studyMode').classList.add('hidden');
             document.getElementById('yogaQuizMode').classList.remove('hidden');
-            nextYogaQuestion();
-        }
-
-        function nextYogaQuestion() {
-            const quest = yogas[Math.floor(Math.random() * yogas.length)];
-            document.getElementById('yogaQuestionText').innerHTML = `Which yoga is formed when <b>${quest.formation.toLowerCase()}</b>?`;
-
-            const container = document.getElementById('yogaOptionsContainer');
-            container.innerHTML = '';
-
-            const wrong = yogas.filter(y => y.name !== quest.name)
-                .sort(() => Math.random() - 0.5)
-                .slice(0, 3);
-            const options = [quest, ...wrong].sort(() => Math.random() - 0.5);
-
-            options.forEach(y => {
-                const opt = document.createElement('div');
-                opt.className = 'quiz-option';
-                opt.innerText = y.name;
-                opt.onclick = () => {
-                    if(y.name === quest.name) {
-                        alert(`Correct! ${quest.name} (${quest.nature})\nEffects: ${quest.effects}`);
-                        nextYogaQuestion();
-                    } else {
-                        alert("Try again!");
-                    }
-                };
-                container.appendChild(opt);
-            });
+            yogaQuiz.start();
         }
 
         function exitYogaQuiz() {
@@ -762,40 +923,10 @@
             document.getElementById('yogaQuizMode').classList.add('hidden');
         }
 
-        // --- QUIZ LOGIC ---
         function startNakshatraQuiz() {
             document.getElementById('studyMode').classList.add('hidden');
             document.getElementById('quizMode').classList.remove('hidden');
-            nextQuestion();
-        }
-
-        function nextQuestion() {
-            const quest = nakshatras[Math.floor(Math.random() * nakshatras.length)];
-            document.getElementById('questionText').innerHTML = `Which Nakshatra is represented by the symbol <b>${quest.symbol}</b>?`;
-
-            const container = document.getElementById('optionsContainer');
-            container.innerHTML = '';
-
-            // Show the correct answer plus 3 random wrong ones, shuffled
-            const wrong = nakshatras.filter(n => n.name !== quest.name)
-                .sort(() => Math.random() - 0.5)
-                .slice(0, 3);
-            const options = [quest, ...wrong].sort(() => Math.random() - 0.5);
-
-            options.forEach(n => {
-                const opt = document.createElement('div');
-                opt.className = 'quiz-option';
-                opt.innerText = n.name;
-                opt.onclick = () => {
-                    if(n.name === quest.name) {
-                        alert(`Correct! ${quest.name} (${quest.degrees})\nRuling Planet: ${quest.ruler}\nDeity: ${quest.deity}`);
-                        nextQuestion();
-                    } else {
-                        alert("Try again!");
-                    }
-                };
-                container.appendChild(opt);
-            });
+            nakQuiz.start();
         }
 
         function exitQuiz() {
