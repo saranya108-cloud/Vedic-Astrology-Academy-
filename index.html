@@ -825,6 +825,7 @@
         function makeQuiz(cfg) {
             let current = null;
             let lastName = null;
+            let answered = false;
             let score = { right: 0, asked: 0 };
 
             function updateScore() {
@@ -835,11 +836,11 @@
             function next() {
                 document.getElementById(cfg.nextId).classList.add('hidden');
                 document.getElementById(cfg.feedbackId).classList.add('hidden');
+                answered = false;
 
-                let pick;
-                do {
-                    pick = cfg.pool[Math.floor(Math.random() * cfg.pool.length)];
-                } while (cfg.pool.length > 1 && pick.name === lastName);
+                const candidates = cfg.pool.filter(q => q.name !== lastName);
+                const available = candidates.length ? candidates : cfg.pool;
+                const pick = available[Math.floor(Math.random() * available.length)];
                 lastName = pick.name;
                 current = pick;
 
@@ -863,6 +864,9 @@
             }
 
             function answer(el, choice) {
+                if (answered) return;
+                answered = true;
+
                 const container = document.getElementById(cfg.optionsId);
                 const correct = choice.name === current.name;
                 score.asked++;
