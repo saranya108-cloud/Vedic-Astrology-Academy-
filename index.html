@@ -827,13 +827,32 @@
             let lastName = null;
             let answered = false;
             let score = { right: 0, asked: 0 };
+            const questionLimit = cfg.questionLimit || 10;
 
             function updateScore() {
                 document.getElementById(cfg.scoreId).innerText =
                     score.asked ? `Score: ${score.right} / ${score.asked}` : 'One attempt per question — good luck!';
             }
 
+            function finish() {
+                answered = true;
+                document.getElementById(cfg.nextId).classList.add('hidden');
+                document.getElementById(cfg.optionsId).innerHTML = '';
+                document.getElementById(cfg.questionId).innerHTML = '<strong>Quiz complete!</strong>';
+
+                const fb = document.getElementById(cfg.feedbackId);
+                fb.className = 'quiz-feedback';
+                fb.innerHTML = `Final score: <strong>${score.right} / ${questionLimit}</strong>. Select Back to Study when you are ready to continue.`;
+                document.getElementById(cfg.scoreId).innerText = `Final Score: ${score.right} / ${questionLimit}`;
+                fb.scrollIntoView({ block: 'nearest' });
+            }
+
             function next() {
+                if (score.asked >= questionLimit) {
+                    finish();
+                    return;
+                }
+
                 document.getElementById(cfg.nextId).classList.add('hidden');
                 document.getElementById(cfg.feedbackId).classList.add('hidden');
                 answered = false;
@@ -845,7 +864,8 @@
                 current = pick;
 
                 updateScore();
-                document.getElementById(cfg.questionId).innerHTML = cfg.question(pick);
+                document.getElementById(cfg.questionId).innerHTML =
+                    `<strong>Question ${score.asked + 1} of ${questionLimit}</strong><br>${cfg.question(pick)}`;
 
                 const container = document.getElementById(cfg.optionsId);
                 container.innerHTML = '';
@@ -886,6 +906,7 @@
 
                 updateScore();
                 const nextButton = document.getElementById(cfg.nextId);
+                nextButton.innerText = score.asked >= questionLimit ? 'View Results ➜' : 'Next Question ➜';
                 nextButton.classList.remove('hidden');
                 nextButton.focus({ preventScroll: true });
                 nextButton.scrollIntoView({ block: 'nearest' });
