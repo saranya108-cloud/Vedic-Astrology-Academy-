@@ -98,6 +98,15 @@ Clicking any chart cell shows the house's significance relative to the example L
    - Planetary Yogas (Major/Secondary tabs + quiz)
    - The 9 Grahas, Vimshottari Dasha, the 12 Houses, and Planetary Aspects
 
+### Testing
+```bash
+npm install
+npx playwright install chromium
+npm test
+```
+
+The browser suite covers chart interaction, mobile quiz continuation, one-attempt scoring, bounded question selection, and quiz completion.
+
 ## Technical Details
 
 ### Built With

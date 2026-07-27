@@ -1,0 +1,23 @@
+{
+  "name": "vedic-astrology-academy",
+  "version": "1.0.0",
+  "private": true,
+  "description": "An interactive web-based educational platform for learning Vedic Astrology (Jyotish) fundamentals through visualization, structured learning modules, and quizzes.",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saranya108-cloud/Vedic-Astrology-Academy-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/saranya108-cloud/Vedic-Astrology-Academy-/issues"
+  },
+  "homepage": "https://github.com/saranya108-cloud/Vedic-Astrology-Academy-#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.62.0"
+  }
+}
