@@ -909,7 +909,7 @@
                 nextButton.innerText = score.asked >= questionLimit ? 'View Results ➜' : 'Next Question ➜';
                 nextButton.classList.remove('hidden');
                 nextButton.focus({ preventScroll: true });
-                nextButton.scrollIntoView({ block: 'nearest' });
+                nextButton.scrollIntoView({ block: 'center' });
             }
 
             function start() {
