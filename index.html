@@ -881,7 +881,10 @@
                     : `❌ Not quite — the answer is <strong>${current.name}</strong>. `) + cfg.detail(current);
 
                 updateScore();
-                document.getElementById(cfg.nextId).classList.remove('hidden');
+                const nextButton = document.getElementById(cfg.nextId);
+                nextButton.classList.remove('hidden');
+                nextButton.focus({ preventScroll: true });
+                nextButton.scrollIntoView({ block: 'nearest' });
             }
 
             function start() {
