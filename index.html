@@ -825,26 +825,47 @@
         function makeQuiz(cfg) {
             let current = null;
             let lastName = null;
+            let answered = false;
             let score = { right: 0, asked: 0 };
+            const questionLimit = cfg.questionLimit || 10;
 
             function updateScore() {
                 document.getElementById(cfg.scoreId).innerText =
                     score.asked ? `Score: ${score.right} / ${score.asked}` : 'One attempt per question — good luck!';
             }
 
+            function finish() {
+                answered = true;
+                document.getElementById(cfg.nextId).classList.add('hidden');
+                document.getElementById(cfg.optionsId).innerHTML = '';
+                document.getElementById(cfg.questionId).innerHTML = '<strong>Quiz complete!</strong>';
+
+                const fb = document.getElementById(cfg.feedbackId);
+                fb.className = 'quiz-feedback';
+                fb.innerHTML = `Final score: <strong>${score.right} / ${questionLimit}</strong>. Select Back to Study when you are ready to continue.`;
+                document.getElementById(cfg.scoreId).innerText = `Final Score: ${score.right} / ${questionLimit}`;
+                fb.scrollIntoView({ block: 'nearest' });
+            }
+
             function next() {
+                if (score.asked >= questionLimit) {
+                    finish();
+                    return;
+                }
+
                 document.getElementById(cfg.nextId).classList.add('hidden');
                 document.getElementById(cfg.feedbackId).classList.add('hidden');
+                answered = false;
 
-                let pick;
-                do {
-                    pick = cfg.pool[Math.floor(Math.random() * cfg.pool.length)];
-                } while (cfg.pool.length > 1 && pick.name === lastName);
+                const candidates = cfg.pool.filter(q => q.name !== lastName);
+                const available = candidates.length ? candidates : cfg.pool;
+                const pick = available[Math.floor(Math.random() * available.length)];
                 lastName = pick.name;
                 current = pick;
 
                 updateScore();
-                document.getElementById(cfg.questionId).innerHTML = cfg.question(pick);
+                document.getElementById(cfg.questionId).innerHTML =
+                    `<strong>Question ${score.asked + 1} of ${questionLimit}</strong><br>${cfg.question(pick)}`;
 
                 const container = document.getElementById(cfg.optionsId);
                 container.innerHTML = '';
@@ -863,6 +884,9 @@
             }
 
             function answer(el, choice) {
+                if (answered) return;
+                answered = true;
+
                 const container = document.getElementById(cfg.optionsId);
                 const correct = choice.name === current.name;
                 score.asked++;
@@ -882,9 +906,10 @@
 
                 updateScore();
                 const nextButton = document.getElementById(cfg.nextId);
+                nextButton.innerText = score.asked >= questionLimit ? 'View Results ➜' : 'Next Question ➜';
                 nextButton.classList.remove('hidden');
                 nextButton.focus({ preventScroll: true });
-                nextButton.scrollIntoView({ block: 'nearest' });
+                nextButton.scrollIntoView({ block: 'center' });
             }
 
             function start() {

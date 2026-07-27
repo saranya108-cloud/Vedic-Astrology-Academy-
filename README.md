@@ -24,7 +24,7 @@ The academy is organized into six structured modules, each accessible from the s
   - **Ruling deity**
   - **Degree span** in the sidereal zodiac (each spans 13°20')
   - **Associated symbols**, including common alternates
-- **Nakshatra Quiz**: Identify the nakshatra from its symbol (4 shuffled options, one attempt per question) with a running score; every answer reveals the full details
+- **Nakshatra Quiz**: Complete a 10-question round identifying nakshatras from their symbols (4 shuffled options, one attempt per question), with a running score and final result
 
 ### ⭐ Module 2: Planetary Yogas
 - **13 Major Yogas**, including:
@@ -36,7 +36,7 @@ The academy is organized into six structured modules, each accessible from the s
   - Sun-based: Vesi, Vasi, Ubhayachari
   - Amala, Lakshmi, Saraswati, Kala Sarpa
 - Each yoga card shows its **formation rule**, **color-coded nature** (auspicious / challenging / mixed), and **effects**
-- **Yoga Quiz**: Identify which yoga is formed by a given planetary combination, with one attempt per question and a running score
+- **Yoga Quiz**: Complete a 10-question round identifying yogas from planetary combinations, with one attempt per question, a running score, and a final result
 
 ### 🪐 Module 3: The 9 Grahas
 - All nine planets of Jyotish: Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, and Ketu
@@ -97,6 +97,15 @@ Clicking any chart cell shows the house's significance relative to the example L
    - The 27 Nakshatras (guide + quiz)
    - Planetary Yogas (Major/Secondary tabs + quiz)
    - The 9 Grahas, Vimshottari Dasha, the 12 Houses, and Planetary Aspects
+
+### Testing
+```bash
+npm install
+npx playwright install chromium
+npm test
+```
+
+The browser suite covers chart interaction, mobile quiz continuation, one-attempt scoring, bounded question selection, and quiz completion.
 
 ## Technical Details
 
