@@ -3,6 +3,7 @@ const { pathToFileURL } = require('url');
 const { test, expect } = require('@playwright/test');
 
 const appUrl = pathToFileURL(path.resolve(__dirname, '..', 'index.html')).href;
+const panelIds = ['studyMode', 'moduleMode', 'guideMode', 'yogaMode', 'yogaQuizMode', 'quizMode'];
 const inactivePanels = ['moduleMode', 'guideMode', 'yogaMode', 'yogaQuizMode', 'quizMode'];
 
 test.beforeEach(async ({ page }) => {
@@ -40,6 +41,32 @@ test('chart selection restores visible study feedback from every view', async ({
         for (const panelId of inactivePanels) {
             await expect(page.locator(`#${panelId}`)).toBeHidden();
         }
+    }
+});
+
+test('navigation keeps exactly one panel visible', async ({ page }) => {
+    const entries = [
+        { button: 'text=Explore the 27 Nakshatras', panel: 'guideMode' },
+        { button: 'text=Explore Planetary Yogas', panel: 'yogaMode' },
+        { button: 'text=Explore the Grahas', panel: 'moduleMode' },
+        { button: 'text=Explore the Dasha System', panel: 'moduleMode' },
+        { button: 'text=Explore the Bhavas', panel: 'moduleMode' },
+        { button: 'text=Explore Drishti', panel: 'moduleMode' },
+        { button: 'text=Start Nakshatra Quiz', panel: 'quizMode' },
+        { button: 'text=Start Yoga Quiz', panel: 'yogaQuizMode' }
+    ];
+
+    for (const entry of entries) {
+        await page.goto(appUrl);
+        await page.click(entry.button);
+        expect(await page.evaluate(ids =>
+            ids.filter(id => !document.getElementById(id).classList.contains('hidden')), panelIds
+        )).toEqual([entry.panel]);
+
+        await page.locator(`#${entry.panel}`).getByText('Back to Study').click();
+        expect(await page.evaluate(ids =>
+            ids.filter(id => !document.getElementById(id).classList.contains('hidden')), panelIds
+        )).toEqual(['studyMode']);
     }
 });
 

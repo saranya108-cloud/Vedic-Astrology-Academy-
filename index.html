@@ -616,10 +616,16 @@
             });
         }
 
+        const panelIds = ['studyMode', 'moduleMode', 'guideMode', 'yogaMode', 'yogaQuizMode', 'quizMode'];
+
+        function showPanel(activeId) {
+            panelIds.forEach(id => {
+                document.getElementById(id).classList.toggle('hidden', id !== activeId);
+            });
+        }
+
         function showLesson(idx) {
-            const panelIds = ['moduleMode', 'guideMode', 'yogaMode', 'yogaQuizMode', 'quizMode'];
-            panelIds.forEach(id => document.getElementById(id).classList.add('hidden'));
-            document.getElementById('studyMode').classList.remove('hidden');
+            showPanel('studyMode');
 
             const sign = signs[idx];
             // Calculate house relative to Lagna in Taurus (idx 1)
@@ -647,8 +653,7 @@
 
         // --- NAKSHATRA GUIDE ---
         function showNakshatraGuide() {
-            document.getElementById('studyMode').classList.add('hidden');
-            document.getElementById('guideMode').classList.remove('hidden');
+            showPanel('guideMode');
 
             const list = document.getElementById('nakshatraList');
             list.innerHTML = '';
@@ -667,8 +672,7 @@
         }
 
         function exitGuide() {
-            document.getElementById('studyMode').classList.remove('hidden');
-            document.getElementById('guideMode').classList.add('hidden');
+            showPanel('studyMode');
         }
 
         const grahas = [
@@ -724,8 +728,7 @@
 
         // --- GENERIC MODULE VIEWER ---
         function openModule(title, intro, cards) {
-            document.getElementById('studyMode').classList.add('hidden');
-            document.getElementById('moduleMode').classList.remove('hidden');
+            showPanel('moduleMode');
             document.getElementById('moduleTitle').innerText = title;
             document.getElementById('moduleIntro').innerHTML = intro;
 
@@ -740,8 +743,7 @@
         }
 
         function exitModule() {
-            document.getElementById('studyMode').classList.remove('hidden');
-            document.getElementById('moduleMode').classList.add('hidden');
+            showPanel('studyMode');
         }
 
         function showGrahaModule() {
@@ -784,8 +786,7 @@
 
         // --- YOGA MODULE ---
         function showYogaModule() {
-            document.getElementById('studyMode').classList.add('hidden');
-            document.getElementById('yogaMode').classList.remove('hidden');
+            showPanel('yogaMode');
             renderYogaList('Major');
         }
 
@@ -808,8 +809,7 @@
         }
 
         function exitYogaModule() {
-            document.getElementById('studyMode').classList.remove('hidden');
-            document.getElementById('yogaMode').classList.add('hidden');
+            showPanel('studyMode');
         }
 
         // --- QUIZ ENGINE ---
@@ -947,25 +947,21 @@
         });
 
         function startYogaQuiz() {
-            document.getElementById('studyMode').classList.add('hidden');
-            document.getElementById('yogaQuizMode').classList.remove('hidden');
+            showPanel('yogaQuizMode');
             yogaQuiz.start();
         }
 
         function exitYogaQuiz() {
-            document.getElementById('studyMode').classList.remove('hidden');
-            document.getElementById('yogaQuizMode').classList.add('hidden');
+            showPanel('studyMode');
         }
 
         function startNakshatraQuiz() {
-            document.getElementById('studyMode').classList.add('hidden');
-            document.getElementById('quizMode').classList.remove('hidden');
+            showPanel('quizMode');
             nakQuiz.start();
         }
 
         function exitQuiz() {
-            document.getElementById('studyMode').classList.remove('hidden');
-            document.getElementById('quizMode').classList.add('hidden');
+            showPanel('studyMode');
         }
 
         initChart();
