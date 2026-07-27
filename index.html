@@ -617,16 +617,22 @@
         }
 
         function showLesson(idx) {
+            const panelIds = ['moduleMode', 'guideMode', 'yogaMode', 'yogaQuizMode', 'quizMode'];
+            panelIds.forEach(id => document.getElementById(id).classList.add('hidden'));
+            document.getElementById('studyMode').classList.remove('hidden');
+
             const sign = signs[idx];
             // Calculate house relative to Lagna in Taurus (idx 1)
             const house = ((idx - 1 + 12) % 12) + 1;
 
-            document.getElementById('lessonText').innerHTML = `
+            const lesson = document.getElementById('lessonText');
+            lesson.innerHTML = `
                 <strong>Sign:</strong> ${sign.sans} (${sign.name})<br>
                 <strong>House:</strong> ${house}<br>
                 <strong>Ruler:</strong> ${sign.ruler}<br><br>
                 <em>"The ${ordinal(house)} house in ${sign.name} shows how you handle ${getHouseKeyword(house)}."</em>
             `;
+            lesson.scrollIntoView({ block: 'nearest' });
         }
 
         function ordinal(n) {
