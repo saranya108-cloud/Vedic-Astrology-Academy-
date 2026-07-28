@@ -624,31 +624,36 @@
             });
         }
 
+        // Natural zodiac house associations (Mesha=1 … Meena=12), not houses from the example Taurus Lagna
+        const naturalHouseLessons = {
+            1: "The 1st house is associated with self, body, and overall life direction.",
+            2: "The 2nd house is associated with wealth, speech, and family resources.",
+            3: "The 3rd house is associated with effort, courage, and communication.",
+            4: "The 4th house is associated with home, mother, emotional foundations, and domestic life.",
+            5: "The 5th house is associated with children, creativity, the arts, romance, and self-expression.",
+            6: "The 6th house is associated with health, digestion, daily work, service, and obstacles.",
+            7: "The 7th house is associated with relationships, marriage, the spouse, partnerships, and open enemies. The 1st house represents the self, while the 7th represents the other.",
+            8: "The 8th house is associated with other people’s money, inheritance, the occult, transformation, longevity, and death.",
+            9: "The 9th house is associated with spirituality, dharma, higher learning, teachers, pilgrimage, and organized religion.",
+            10: "The 10th house is associated with career, public responsibility, authority, status, and the father.",
+            11: "The 11th house is associated with community, gains, and group activities.",
+            12: "The 12th house is associated with loss, expenses, and liberation."
+        };
+
         function showLesson(idx) {
             showPanel('studyMode');
 
             const sign = signs[idx];
-            // Calculate house relative to Lagna in Taurus (idx 1)
-            const house = ((idx - 1 + 12) % 12) + 1;
+            const house = idx + 1;
 
             const lesson = document.getElementById('lessonText');
             lesson.innerHTML = `
                 <strong>Sign:</strong> ${sign.sans} (${sign.name})<br>
-                <strong>House:</strong> ${house}<br>
+                <strong>Traditional House Association:</strong> ${house}<br>
                 <strong>Ruler:</strong> ${sign.ruler}<br><br>
-                <em>"The ${ordinal(house)} house in ${sign.name} shows how you handle ${getHouseKeyword(house)}."</em>
+                <em>${naturalHouseLessons[house]}</em>
             `;
             lesson.scrollIntoView({ block: 'nearest' });
-        }
-
-        function ordinal(n) {
-            const suffix = ["th", "st", "nd", "rd"][(n % 10 <= 3 && Math.floor(n / 10) !== 1) ? n % 10 : 0];
-            return n + suffix;
-        }
-
-        function getHouseKeyword(h) {
-            const keys = ["", "Self/Body", "Wealth", "Effort", "Home", "Children", "Health", "Partners", "Longevity", "Dharma", "Career", "Community & Group Activities", "Loss"];
-            return keys[h];
         }
 
         // --- NAKSHATRA GUIDE ---

@@ -22,6 +22,27 @@ test('all chart cells update the lesson', async ({ page }) => {
     }
 });
 
+test('Karka through Makara show traditional natural-zodiac house associations', async ({ page }) => {
+    const expected = [
+        { sans: 'Karka', house: 4, ruler: 'Moon', snippet: 'home, mother, emotional foundations' },
+        { sans: 'Simha', house: 5, ruler: 'Sun', snippet: 'children, creativity, the arts, romance' },
+        { sans: 'Kanya', house: 6, ruler: 'Mercury', snippet: 'health, digestion, daily work' },
+        { sans: 'Tula', house: 7, ruler: 'Venus', snippet: 'relationships, marriage, the spouse' },
+        { sans: 'Vrischika', house: 8, ruler: 'Mars', snippet: "other people’s money" },
+        { sans: 'Dhanu', house: 9, ruler: 'Jupiter', snippet: 'spirituality, dharma, higher learning' },
+        { sans: 'Makara', house: 10, ruler: 'Saturn', snippet: 'career, public responsibility, authority' }
+    ];
+
+    for (const { sans, house, ruler, snippet } of expected) {
+        await page.locator('#chartGrid .cell', { hasText: sans }).click();
+        const lesson = page.locator('#lessonText');
+        await expect(lesson).toContainText(`Sign: ${sans}`);
+        await expect(lesson).toContainText(`Traditional House Association: ${house}`);
+        await expect(lesson).toContainText(`Ruler: ${ruler}`);
+        await expect(lesson).toContainText(snippet);
+    }
+});
+
 test('chart selection restores visible study feedback from every view', async ({ page }) => {
     const entries = [
         'button.btn-nak',

@@ -10,7 +10,7 @@ An interactive web-based educational platform for learning Vedic Astrology (Jyot
 - **Planetary Positions**: Visual representation of planets and Lagna (Ascendant)
 - **Clickable Learning**: Select any chart cell to learn about:
   - Sign names (English and Sanskrit)
-  - House number and significance
+  - Traditional natural-zodiac house association and significance
   - Ruling planet for each sign
 
 ## Learning Modules
@@ -66,7 +66,7 @@ The academy is organized into six structured modules, each accessible from the s
 
 ## House Meanings
 
-Clicking any chart cell shows the house's significance relative to the example Lagna:
+Clicking a chart cell shows the sign’s traditional natural-zodiac house association and significance. This educational association is separate from the house position calculated from the example Vrishabha (Taurus) Lagna.
 
 | House | Keyword |
 |-------|---------|
@@ -92,7 +92,7 @@ Clicking any chart cell shows the house's significance relative to the example L
 ### Usage
 1. Open `index.html` in your web browser
 2. View the South Indian birth chart with example planetary positions
-3. Click on any cell in the chart to learn about that sign and house
+3. Click on any cell in the chart to learn about that sign and its traditional natural-zodiac house association
 4. Use the module buttons in the study panel to explore:
    - The 27 Nakshatras (guide + quiz)
    - Planetary Yogas (Major/Secondary tabs + quiz)
@@ -124,7 +124,9 @@ The browser suite covers chart interaction, mobile quiz continuation, one-attemp
 The South Indian chart uses a 4×4 grid with:
 - Fixed sign positions (signs don't rotate)
 - Center area for chart identification
-- Houses calculated clockwise from the Ascendant (Lagna)
+- In the example chart, houses are counted clockwise from the Ascendant (Lagna)
+
+Clicked-sign lessons teach each sign’s traditional natural-zodiac house association; they do not show the Ascendant-based house number for that cell.
 
 ## Example Chart
 
@@ -132,7 +134,7 @@ The default chart includes:
 - **Lagna (Ascendant)**: Taurus (Vrishabha)
 - **Sun**: Leo (Simha)
 
-This creates a sample birth chart for educational purposes.
+This creates a sample birth chart for educational purposes. In that example, actual chart houses are counted from Vrishabha as the 1st house.
 
 ## Future Enhancements
 
