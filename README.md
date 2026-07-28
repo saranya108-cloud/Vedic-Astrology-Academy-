@@ -4,10 +4,10 @@ An interactive web-based educational platform for learning Vedic Astrology (Jyot
 
 ## Features
 
-### 🔮 Interactive Birth Chart
-- **South Indian Style Chart**: Traditional fixed-sign layout with clockwise house system
+### 🔮 Interactive South Indian Rashi Chart
+- **South Indian Style Chart**: Traditional fixed-sign layout
 - **12 Zodiac Signs**: Complete with Sanskrit names (Mesha, Vrishabha, etc.)
-- **Planetary Positions**: Visual representation of planets and Lagna (Ascendant)
+- **Natural Zodiac Reference**: A neutral South Indian rashi chart for learning sign–house associations
 - **Clickable Learning**: Select any chart cell to learn about:
   - Sign names (English and Sanskrit)
   - Traditional natural-zodiac house association and significance
@@ -66,7 +66,7 @@ The academy is organized into six structured modules, each accessible from the s
 
 ## House Meanings
 
-Clicking a chart cell shows the sign’s traditional natural-zodiac house association and significance. This educational association is separate from the house position calculated from the example Vrishabha (Taurus) Lagna.
+Clicking a chart cell shows the sign’s traditional natural-zodiac house association and significance. Signs are fixed in the South Indian layout; the lesson teaches each sign’s natural house association (Mesha = 1st … Meena = 12th), not houses counted from a personal Ascendant.
 
 | House | Keyword |
 |-------|---------|
@@ -91,7 +91,7 @@ Clicking a chart cell shows the sign’s traditional natural-zodiac house associ
 
 ### Usage
 1. Open `index.html` in your web browser
-2. View the South Indian birth chart with example planetary positions
+2. View the South Indian rashi chart (natural zodiac reference)
 3. Click on any cell in the chart to learn about that sign and its traditional natural-zodiac house association
 4. Use the module buttons in the study panel to explore:
    - The 27 Nakshatras (guide + quiz)
@@ -123,18 +123,17 @@ The browser suite covers chart interaction, mobile quiz continuation, one-attemp
 ### Chart Layout
 The South Indian chart uses a 4×4 grid with:
 - Fixed sign positions (signs don't rotate)
-- Center area for chart identification
-- In the example chart, houses are counted clockwise from the Ascendant (Lagna)
+- Center area for chart identification (`South Indian Rashi Chart` / `Natural Zodiac Reference`)
+- Signs arranged in the standard fixed perimeter order (Meena top-left through Mithuna top-right, continuing clockwise around the rim)
 
-Clicked-sign lessons teach each sign’s traditional natural-zodiac house association; they do not show the Ascendant-based house number for that cell.
+Clicked-sign lessons teach each sign’s traditional natural-zodiac house association (Mesha = House 1 … Meena = House 12). In an actual South Indian natal chart, the signs remain in these fixed positions, while the Ascendant may occupy any sign.
 
-## Example Chart
+## Natural Zodiac Reference
 
-The default chart includes:
-- **Lagna (Ascendant)**: Taurus (Vrishabha)
-- **Sun**: Leo (Simha)
-
-This creates a sample birth chart for educational purposes. In that example, actual chart houses are counted from Vrishabha as the 1st house.
+The default chart is a neutral South Indian rashi chart for education:
+- No example Ascendant (Lagna) marker
+- No example planetary placements
+- Fixed signs in the standard South Indian order, with Mithuna (Gemini) in the top-right sign cell
 
 ## Future Enhancements
 

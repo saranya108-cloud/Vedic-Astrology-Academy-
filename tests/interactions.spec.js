@@ -43,6 +43,104 @@ test('Karka through Makara show traditional natural-zodiac house associations', 
     }
 });
 
+test('Mesha through Mithuna, Kumbha, and Meena show complete traditional house lessons', async ({ page }) => {
+    const expected = [
+        {
+            sans: 'Mesha',
+            english: 'Aries',
+            house: 1,
+            ruler: 'Mars',
+            description: 'The 1st house is associated with the self, body, personality, appearance, vitality, and overall life direction.'
+        },
+        {
+            sans: 'Vrishabha',
+            english: 'Taurus',
+            house: 2,
+            ruler: 'Venus',
+            description: 'The 2nd house is associated with wealth, speech, family, food, values, and accumulated resources.'
+        },
+        {
+            sans: 'Mithuna',
+            english: 'Gemini',
+            house: 3,
+            ruler: 'Mercury',
+            description: 'The 3rd house is associated with courage, younger siblings, communication, skills, writing, and self-effort.'
+        },
+        {
+            sans: 'Kumbha',
+            english: 'Aquarius',
+            house: 11,
+            ruler: 'Saturn',
+            description: 'The 11th house is associated with gains, income, fulfillment of desires, friends, networks, community, and group activities.'
+        },
+        {
+            sans: 'Meena',
+            english: 'Pisces',
+            house: 12,
+            ruler: 'Jupiter',
+            description: 'The 12th house is associated with expenses, loss, foreign lands, seclusion, sleep, spiritual release, and moksha.'
+        }
+    ];
+
+    for (const { sans, english, house, ruler, description } of expected) {
+        await page.locator('#chartGrid .cell', { has: page.locator('.sign-label', { hasText: sans }) }).click();
+        const lesson = page.locator('#lessonText');
+        await expect(lesson).toContainText(`Sign: ${sans} (${english})`);
+        await expect(lesson).toContainText(`Traditional House Association: ${house}`);
+        await expect(lesson).toContainText(`Ruler: ${ruler}`);
+        await expect(lesson).toContainText(description);
+    }
+});
+
+test('natural zodiac reference chart has no Ascendant or Sun markers and keeps Mithuna top-right', async ({ page }) => {
+    await expect(page.locator('#chartGrid')).toContainText('South Indian Rashi Chart');
+    await expect(page.locator('#chartGrid')).toContainText('Natural Zodiac Reference');
+    await expect(page.locator('#chartGrid')).not.toContainText('AS (L)');
+    await expect(page.locator('#chartGrid')).not.toContainText('Lagna in Vrishabha');
+    await expect(page.locator('#chartGrid .planet-tag')).toHaveCount(0);
+
+    const topRightSign = await page.evaluate(() => {
+        const cells = [...document.querySelectorAll('#chartGrid .cell')];
+        const tops = cells.map((cell) => cell.getBoundingClientRect().top);
+        const minTop = Math.min(...tops);
+        const topRow = cells.filter((cell) => Math.abs(cell.getBoundingClientRect().top - minTop) < 2);
+        topRow.sort((a, b) => b.getBoundingClientRect().left - a.getBoundingClientRect().left);
+        return topRow[0].querySelector('.sign-label').textContent.trim();
+    });
+    expect(topRightSign).toBe('Mithuna');
+});
+
+test('all chart cells are operable with mouse, Enter, and Space without console errors', async ({ page }) => {
+    const consoleErrors = [];
+    page.on('console', (msg) => {
+        if (msg.type() === 'error') consoleErrors.push(msg.text());
+    });
+    page.on('pageerror', (err) => consoleErrors.push(String(err)));
+
+    const cells = page.locator('#chartGrid .cell');
+    await expect(cells).toHaveCount(12);
+
+    for (let index = 0; index < 12; index++) {
+        const cell = cells.nth(index);
+        const sign = await cell.locator('.sign-label').innerText();
+
+        await cell.click();
+        await expect(page.locator('#lessonText')).toContainText(`Sign: ${sign}`);
+        await expect(page.locator('#lessonText')).toContainText('Traditional House Association:');
+        await expect(page.locator('#lessonText')).toContainText('Ruler:');
+
+        await cell.focus();
+        await cell.press('Enter');
+        await expect(page.locator('#lessonText')).toContainText(`Sign: ${sign}`);
+
+        await cell.focus();
+        await cell.press('Space');
+        await expect(page.locator('#lessonText')).toContainText(`Sign: ${sign}`);
+    }
+
+    expect(consoleErrors).toEqual([]);
+});
+
 test('chart selection restores visible study feedback from every view', async ({ page }) => {
     const entries = [
         'button.btn-nak',

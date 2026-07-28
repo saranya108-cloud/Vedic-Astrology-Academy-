@@ -373,7 +373,7 @@
         <div>
             <div class="jyotish-grid" id="chartGrid">
                 </div>
-            <p style="text-align:center"><small>South Indian Style: Fixed Signs, Clockwise Houses</small></p>
+            <p style="text-align:center"><small>South Indian Style: Fixed Signs, Natural Zodiac Houses</small></p>
             <div class="legend">
                 <span style="background:var(--fire)">🔥 Fire</span>
                 <span style="background:var(--earth)">🌱 Earth</span>
@@ -585,7 +585,7 @@
                     if (i === 5) {
                         const center = document.createElement('div');
                         center.className = 'empty-center';
-                        center.innerHTML = `Example Chart<br><small>Lagna in Vrishabha</small>`;
+                        center.innerHTML = `South Indian Rashi Chart<br><small>Natural Zodiac Reference</small>`;
                         grid.appendChild(center);
                     }
                     return;
@@ -596,11 +596,6 @@
                 const elements = ['fire', 'earth', 'air', 'water'];
                 cell.className = `cell element-${elements[signIdx % 4]}`;
                 cell.innerHTML = `<span class="sign-label">${sign.sans}</span>`;
-
-                // Add an example Lagna in Taurus (Sign 1)
-                if (signIdx === 1) cell.innerHTML += `<span class="planet-tag lagna-tag">AS (L)</span>`;
-                // Add an example Sun in Leo (Sign 4)
-                if (signIdx === 4) cell.innerHTML += `<span class="planet-tag">Sun</span>`;
 
                 cell.tabIndex = 0;
                 cell.setAttribute('role', 'button');
@@ -624,11 +619,11 @@
             });
         }
 
-        // Natural zodiac house associations (Mesha=1 … Meena=12), not houses from the example Taurus Lagna
+        // Natural zodiac house associations (Mesha=1 … Meena=12)
         const naturalHouseLessons = {
-            1: "The 1st house is associated with self, body, and overall life direction.",
-            2: "The 2nd house is associated with wealth, speech, and family resources.",
-            3: "The 3rd house is associated with effort, courage, and communication.",
+            1: "The 1st house is associated with the self, body, personality, appearance, vitality, and overall life direction.",
+            2: "The 2nd house is associated with wealth, speech, family, food, values, and accumulated resources.",
+            3: "The 3rd house is associated with courage, younger siblings, communication, skills, writing, and self-effort.",
             4: "The 4th house is associated with home, mother, emotional foundations, and domestic life.",
             5: "The 5th house is associated with children, creativity, the arts, romance, and self-expression.",
             6: "The 6th house is associated with health, digestion, daily work, service, and obstacles.",
@@ -636,22 +631,38 @@
             8: "The 8th house is associated with other people’s money, inheritance, the occult, transformation, longevity, and death.",
             9: "The 9th house is associated with spirituality, dharma, higher learning, teachers, pilgrimage, and organized religion.",
             10: "The 10th house is associated with career, public responsibility, authority, status, and the father.",
-            11: "The 11th house is associated with community, gains, and group activities.",
-            12: "The 12th house is associated with loss, expenses, and liberation."
+            11: "The 11th house is associated with gains, income, fulfillment of desires, friends, networks, community, and group activities.",
+            12: "The 12th house is associated with expenses, loss, foreign lands, seclusion, sleep, spiritual release, and moksha."
         };
+
+        function assertSignLessonData() {
+            for (let idx = 0; idx < 12; idx++) {
+                const sign = signs[idx];
+                const house = idx + 1;
+                const description = naturalHouseLessons[house];
+                if (!sign || !sign.name || !sign.sans || !sign.ruler || !description) {
+                    throw new Error(`Incomplete lesson data for sign index ${idx}`);
+                }
+            }
+        }
+        assertSignLessonData();
 
         function showLesson(idx) {
             showPanel('studyMode');
 
             const sign = signs[idx];
             const house = idx + 1;
+            const description = naturalHouseLessons[house];
+            if (!sign || !sign.name || !sign.sans || !sign.ruler || !description) {
+                throw new Error(`Incomplete lesson data for sign index ${idx}`);
+            }
 
             const lesson = document.getElementById('lessonText');
             lesson.innerHTML = `
                 <strong>Sign:</strong> ${sign.sans} (${sign.name})<br>
                 <strong>Traditional House Association:</strong> ${house}<br>
                 <strong>Ruler:</strong> ${sign.ruler}<br><br>
-                <em>${naturalHouseLessons[house]}</em>
+                <em>${description}</em>
             `;
             lesson.scrollIntoView({ block: 'nearest' });
         }
